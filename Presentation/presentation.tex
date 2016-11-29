@@ -1,6 +1,8 @@
 \documentclass{beamer}
 \usetheme{metropolis}           % Use metropolis theme
+
 \usepackage[utf8]{inputenc}
+\usepackage[english,ngerman]{babel}
 \usebeamercolor{mathtools}
 
 \title{Congestion games with malicious players}
@@ -10,19 +12,144 @@
 
 
 \begin{document}
-	\maketitle
-	
-	\section{First Section}
+\maketitle
 
-	\begin{frame}{First Frame}
-		Hello, world!
-		
-		\begin{definition}[game]
-			A game $\mathcal{G} = (E, \Pi, \ell,)$
-		\end{definition}
+%INTRO
+\section{Introduction}
+\begin{frame}{TOC
+		}
+	\tableofcontents
+\end{frame}
+
+
+%DEFINING the Game
+\section{Defining the Game}
+
+\begin{frame}{}
 	
-		\begin{itemize}
-			\item latency functions $\ell_e$ for every edge
-		\end{itemize}
-	\end{frame}
+	\begin{definition}[Congestion game]
+		A \emph{symmetric non-atomic congestion game} $\mathcal{G} = (E, \Pi, \ell, v)$
+	\end{definition}
+
+	\begin{itemize}
+		\item edge set $E$
+		\item a family of latency functions $\ell$ with 
+		 $\ell_e: \mathbb{R}_+ \to \mathbb{R}_+$ for every edge $e \in E$
+		\item path set $\Pi$, a subset of $2^E$
+		\item flow value $v \in \mathbb{R}_+$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Flow}
+	\begin{definition}[Flow]
+		A flow in $\mathcal G$ is
+	\end{definition}
+	
+	\begin{definition}[Flow value]
+		Inhalt...
+	\end{definition}
+\end{frame}
+
+\begin{frame}{Cost}
+	\begin{itemize}
+		\item load
+		\item delay
+		\item cost
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Nash flow}
+	\begin{itemize}
+		\item Nash flow
+		\item Nash delay
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Example}
+	Inhalt...
+\end{frame}
+
+
+%ADDING Malicious Players
+\section{Adding Malicious Players}
+\begin{frame}{Induced Game}
+	\begin{itemize}
+		\item Malicious player
+		\item Induced game
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Malicious Best Response}
+	\begin{itemize}
+		\item MBR
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Equilibrium}
+	\begin{itemize}
+		\item Equilibrium
+		\item Nash cost \& delay in malicious setting
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Price of Malice}
+	\begin{itemize}
+		\item POM 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Example}
+	Inhalt...
+\end{frame}
+
+
+%EXISTENCE of Equilibria
+\section{Existence of Equilibria}
+\begin{frame}{Anmerkungen}
+	Ich werde hier nur Ergebnisse vorstellen.
+	Falls es sich ergeben sollte, dass ich noch neben den ausgewählten Themen Zeit habe, werde ich wohl hier etwas hinzufügen.
+\end{frame}
+
+
+%LOWER Bound on the Price of Malice
+\section{Lower Bound on the Price of Malice}
+
+\begin{frame}{Intro-Slide}
+	Intro text
+\end{frame}
+
+\begin{frame}
+	\begin{itemize}
+		\item relative slope
+		\item theorem 6: lower bound
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{proof}
+	several slides with graphics about the proof of theorem 6
+\end{frame}
+
+
+%WINDFALL of Malice
+\section{The Windfall of Malice}
+
+\begin{frame}{Intro-Slide}
+	Intro text
+\end{frame}
+
+\begin{frame}{windfall}
+	Proposition 7
+\end{frame}
+
+\begin{frame}{proof}
+	several slides with graphics about the proof of proposition 7 \\
+	more than for theorem 6
+\end{frame}
+
+
+%CONCLUSION
+\section{Conclusion}
+\begin{frame}{Conclusion}
+	Conclusion
+\end{frame}
 \end{document}
