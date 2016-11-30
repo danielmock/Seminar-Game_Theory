@@ -12,12 +12,25 @@
 
 
 \begin{document}
+
+\begin{frame}{Anmerkungen zum Konzept}
+	\begin{itemize}
+		\item 2.2 ''A differential criterion for equilibrium'' wird ausgelassen
+		\item 4 ''Existence of equilibria'': Es werden nur Ergebnisse vorgestellt und wird vorgezogen
+		\item Der Rest wird fast vollständig vorgestellt
+		\item Ich weiß noch nicht, wie detailliert ich die Definitionen aus 2.1 erklären muss, vielleicht sind diese schon in einem anderen Vortrag in ähnlicher Weise vorgestellt
+	\end{itemize}
+\end{frame}
+
 \maketitle
 
 %INTRO
 \section{Introduction}
-\begin{frame}{TOC
-		}
+
+\setbeamerfont{subsection in toc}{size=\scriptsize}
+\setbeamertemplate{section in toc}[sections numbered]
+
+\begin{frame}{Table of Contents}
 	\tableofcontents
 \end{frame}
 
@@ -25,36 +38,42 @@
 %DEFINING the Game
 \section{Defining the Game}
 
-\begin{frame}{}
+\begin{frame}{Congestion Game}
 	
 	\begin{definition}[Congestion game]
 		A \emph{symmetric non-atomic congestion game} $\mathcal{G} = (E, \Pi, \ell, v)$
 	\end{definition}
 
 	\begin{itemize}
-		\item edge set $E$
-		\item a family of latency functions $\ell$ with 
+		\item the \emph{edge set} $E$
+		\item the a family of \emph{latency functions} $\ell = (\ell_e)_{e \in E}$ with 
 		 $\ell_e: \mathbb{R}_+ \to \mathbb{R}_+$ for every edge $e \in E$
-		\item path set $\Pi$, a subset of $2^E$
-		\item flow value $v \in \mathbb{R}_+$
+		\item the path set $\Pi \subseteq 2^E$
+		\item the flow value $v \in \mathbb{R}_+$
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Flow}
 	\begin{definition}[Flow]
-		A flow in $\mathcal G$ is
+		A flow in $\mathcal G$ is a function $f: \Pi \to \mathbb{R}_+$.
 	\end{definition}
 	
-	\begin{definition}[Flow value]
-		Inhalt...
-	\end{definition}
+	The \emph{flow value} $|f|$ is defined by $\sum_{P \in \Pi} f(P)$.
+	
+	set of all flows in game $\mathcal G: F(\mathcal G)$.
+	
+	set of all flows with flow value $w: F(\mathcal G, w)$.
 \end{frame}
 
 \begin{frame}{Cost}
+	Let $f$ be a flow in $\mathcal G = (E, \ell, \Pi, v)$.
 	\begin{itemize}
-		\item load
-		\item delay
-		\item cost
+		\item The \alert{load} on an edge $e \in E$: 
+			\[x_e(f) := \sum_{P \in \Pi | e \in P} f(P) \]
+		\item The \alert{delay} on a path $P \in \Pi$
+			\[L(P) := \sum_{e \in P} \ell_e(x_e(f)) \]
+		\item The \alert{cost} of $f$:
+			\[C(f) := \sum_{P \in \Pi} f(P) \cdot L(P) = \sum_{e \in E} x_e(f) \cdot \ell_e(x_e(f)) \]
 	\end{itemize}
 \end{frame}
 
@@ -66,7 +85,7 @@
 \end{frame}
 
 \begin{frame}{Example}
-	Inhalt...
+	
 \end{frame}
 
 
@@ -125,7 +144,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{proof}
+\begin{frame}{Proof}
 	several slides with graphics about the proof of theorem 6
 \end{frame}
 
@@ -137,13 +156,14 @@
 	Intro text
 \end{frame}
 
-\begin{frame}{windfall}
+\begin{frame}{Windfall}
 	Proposition 7
 \end{frame}
 
-\begin{frame}{proof}
+\begin{frame}{Proof}
 	several slides with graphics about the proof of proposition 7 \\
-	more than for theorem 6
+	more than for theorem 6 \\
+	especially more calculations 
 \end{frame}
 
 
