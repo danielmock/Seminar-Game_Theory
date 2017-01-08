@@ -1,0 +1,464 @@
+\documentclass{beamer}
+
+\usepackage[euler-digits]{eulervm} % EulerVM math font
+\usefonttheme{professionalfonts}
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n} % alte mathcal symbole
+
+\usetheme{metropolis}           % Use metropolis theme
+%standard packages
+%\usepackage[utf8]{inputenc}
+\usepackage[english,ngerman]{babel}
+\usepackage{physics}
+\usepackage{mathtools}
+\usepackage{tkz-graph}
+\usepackage{booktabs}
+
+\usetikzlibrary{arrows.meta}
+%andere packages
+% Definitionen
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+%settings
+\setsansfont[BoldFont={Fira Sans SemiBold}]{Fira Sans Book} % für shitty Projektoren
+
+%standard init
+\title{Auslastungsspiele mit bösartigen Spielern}
+\subtitle{Congestion games with malicious players}
+\date{\today}
+\author{Daniel A. Mock}
+\institute{Lehrstuhl i1 -- RWTH Aachen}
+
+\begin{document}
+\maketitle
+
+\section{Einführung in Auslastungsspiele}
+\begin{frame}{Anmerkungen}
+	\begin{itemize}
+		\item Wie genau muss ich Auslastungsspiele vorstellen? Wie viel ist bekannt?
+		\item Wie ich welche Begriffe übersetze, ist noch offen
+		\begin{itemize}
+			\item MBR
+			\item Delay
+			\item malicious = bösartig
+			\item Nashfluss
+			\item Windfall of Malice
+		\end{itemize}
+	\item Overlays fehlen
+	\item Beispiele fehlen
+	\end{itemize}
+\end{frame}
+
+% Zu langer Text?
+\begin{frame}{Auslastungsspiel}
+	\begin{block}{Szenario}
+		\begin{itemize}
+			\item $s-t$ Netzwerk $G$ mit Kostenfunktionen für jede Kante
+			\item Fluss $f$ mit festen Wert soll von $s$ nach $t$ fließen
+			\item Fluss wird von einem Kontinuum von Spielern kontrolliert
+			\item Kantenkosten abhängig von der Auslastung dieser Kante
+			\item Spieler versuchen Kosten zu optimieren
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{Später: schädliche Spieler}
+		\begin{itemize}
+			\item ein Teil des Flusses wird von schädlichen Spielern kontrolliert
+			\item Ziel: Maximieren der Kosten
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+% formatierung der Definitionen nicht einheitlich
+\begin{frame}{Definition Auslastungsspiel}
+	Ein symmetrisches, nicht-atomares \alert{Auslastungsspiel} $\mathcal G = (E, \vec{\ell}, \Pi, v)$
+	\begin{itemize}
+		\item $E$: Kantenmenge
+		\item $\vec{\ell}$: Vektor von Latenzfunktionen $\ell_e : \mathbb R_+ \to \mathbb R_+$ für jede Kante $e$
+		\item $\Pi$ Pfadmenge
+		\item $v$ erzielter Flusswert
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Fluss}
+	Ein \alert{Fluss} ist eine Abbildung $f: \Pi \to \mathbb R^+$. 
+	
+	Der \alert{Wert} eines Flusses ist \[ \abs{f} = \sum_{P \in \Pi} f(P) \]
+	
+	Die Menge aller Flüsse mit Wert $v$ im Spiel $\mathcal G$ ist $F(\mathcal G, v)$.
+	
+	Die Auslastung an einer Kante $e$ ist \[ f(e) = \sum_{\mathclap{P \in \Pi: e \in P}} f(P) \]
+\end{frame}
+
+\begin{frame}{Kosten}
+	Der \alert{Delay} auf einem Pfad $P \in \Pi$ ist
+	\[ L(P) = \sum_{e \in P} \ell_e\left(f\left(e\right)\right). \]
+	
+	Die \alert{Kosten} eines Flusses $f$ sind
+	\begin{align*}
+		C(f) &= \sum_{P \in \Pi} f(P) \cdot L(P) \\
+			&= \sum_{e \in E} f(e) \cdot \ell_e\left(f\left(e\right)\right). 
+	\end{align*} 
+\end{frame}
+
+\begin{frame}{Nashfluss}
+	Sei $f$ ein gültiger Fluss auf $\mathcal G$. 
+	Der Fluss $f$ ist ein \alert{Nash-Fluss}, wenn für alle $P, P' \in \Pi$ und $f(P) > 0$ gilt
+	\[
+		L(P) \leq L(P').
+	\]
+	Für einen Nashfluss $f$:
+	\begin{itemize}
+		\item \emph{Nashkosten} $C(\mathcal G) := C(f)$
+		\item \emph{Nashdelay} $D(\mathcal G) := D(f) := C(f)/|f|$
+	\end{itemize}
+	
+	\begin{block}{Beobachtung}
+		Jeder Nashfluss hat die gleichen Kosten $C(f)$. \\
+		Für alle Pfade $P$ mit $f(P) > 0$ ist $L(P) = D(f)$, wenn $f$ Nashfluss.
+	\end{block}
+
+\end{frame}
+
+\begin{frame}{Bekanntes über Auslastungsspiele}
+	\begin{itemize}
+		\item sind Potentialspiele
+		\item pures Nashequilibrium existiert
+	\end{itemize}
+\end{frame}
+
+
+\section{Bösartige Spieler}
+\begin{frame}{Bösartige Spieler}
+	\begin{itemize}
+		\item kontrolliert Fluss $g$ mit Flusswert $w$
+		\item maximiert Kosten der rationalen Spieler
+		\item möglicherweise randomisiert mit W'keitverteilung $\gamma$
+		\item wird als \emph{ein} Spieler modelliert
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Induziertes Spiel}
+	Sei $\mathcal G = (E, \vec{\ell}, \Pi, v)$, $\gamma$ eine W'keitverteilung auf $F(\mathcal G, w)$ und Fluss $g$ eine Probe aus $\gamma$. 
+	
+	Dann ist $\mathcal G^\gamma = (E, \vec{\ell^\gamma}, \Pi, v-w)$ ein \alert{induziertes Spiel} mit 
+	\[ \ell_e^\gamma(x) = \mathbb E[\ell_e(x+ g(e))] .\]
+\end{frame}
+
+\begin{frame}{Malicious Best Response}
+	Für einen Fluss $f$ (der rationalen Spieler) im Spiel $\mathcal G$ ist die \alert{bösartige beste Antwort} zu $f$ die Menge der Flüsse
+	\[ MBR(f) = \argmax_{g \in F(\mathcal G, w)} \, C^g(f) .\]
+	
+	Eine W'keitsverteilung $\gamma$ auf $F(\mathcal G, w)$ ist ein MBR zu $f$, wenn ein Träger von $\gamma$ in $MBR(f)$ liegt.
+\end{frame}
+
+\begin{frame}{Equilibrium}
+	Für ein Spiel $\mathcal G$ mit einem bösartigen Spieler ist $(f, \gamma)$ ein (semi-pures) \alert{Equilibrium}, wenn $f$ ein Nashfluss im induziertem Spiel $\mathcal G^\gamma$ und $\gamma$ eine MBR zu $f$ ist. 
+	
+	Das Equilibrium ist \alert{pur}, wenn $\gamma$ nur einen Träger besitzt.
+	
+	Nashdelay $D(\mathcal G, w)$ ist
+	\[
+		\sup \left\{\frac{C^\gamma(f)}{|f|} : (f,\gamma) \text{ ist ein Equilibrium} \right\}
+	\]
+\end{frame}
+
+\begin{frame}{Price of Malice}
+	Sei $\mathcal G = (E, \vec{\ell}, \Pi, v)$ ein Spiel mit einem bösartigen Spieler.
+	Dann ist der \alert{Price of Malice} definiert durch
+	\begin{align*}
+		POM(f) &= \lim_{\epsilon \to 0^+} \dfrac{D(\mathcal G, \epsilon v) - D(\mathcal G)}{\epsilon D(\mathcal G)}  \\
+		&= \frac{1}{D(\mathcal G)} \cdot \dv{\epsilon}(D(\mathcal G, v \epsilon))_{(\epsilon = 0)}.
+	\end{align*}
+\end{frame}
+
+\begin{frame}{Weiteres zu Equilbria}
+	Bei Auslastungsspielen mit einem bösartigen Spieler 
+	\begin{itemize}
+		\item existiert immer ein \emph{semi-pures} Nashgleichgewicht, wobei der bösartige Spieler randomisieren darf
+		\item existieren pure Nashgleichgewichte (PNE) \emph{nicht} immer
+		\item mit \emph{konkaven} Latenzfunktionen existiert ein PNE
+	\end{itemize}
+\end{frame}
+
+\section{Untere Schranke für den PoM}
+
+\begin{frame}{Ursachen für einen hohen PoM}
+	\begin{itemize}
+		\item leicht 'verstopfbare' Kanten: Latenfunktion steigt sehr schnell
+		\item lange Pfade
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Relative Slope}
+	Sei $\ell : [0,1] \to \mathbb R^+$ differenzierbar.
+	Dann ist der \alert{relative Slope} $d$
+	\[ d = \sup_{x \in [0,1]} \dfrac{\ell'(x)}{\ell(x)} x .\]
+	Dies entspricht dem \emph{relativen Fehler} $\kappa_{rel} = \dfrac{\text{rel. } \Delta y}{\text{rel. } \Delta x}$.
+	
+	\begin{table}[]
+		\begin{tabular}{@{}llll@{}}
+			\toprule
+			Funktion       & const. & $x^a$ & $e^{ax}$ \\ \midrule
+			relative Slope & $0$      & $a$     & $a$        \\ \bottomrule
+		\end{tabular}
+	\end{table}
+	\begin{theorem}
+		Es existiert ein Spiel $\mathcal G$ mit $\mathcal O(m)$ Kanten, sodass der Price of Malice $d \cdot (m-1)$ beträgt, wobei $d$ der relative Slope der Kanten ist.
+	\end{theorem}
+\end{frame}
+
+\begin{frame}{Netzwerk mit hohem PoM}
+	\begin{figure}
+	\begin{tikzpicture}
+		\SetGraphUnit{2}
+		\GraphInit[vstyle=Classic]
+		\SetUpEdge[style={->, thick}, color=gray]
+		\tikzset{LabelStyle/.style = {fill=none}}
+		\SetVertexNoLabel
+		\Vertex{P1}
+		\SO(P1){P2}
+		\SO(P2){P3}
+		
+		\foreach \v in{1,2,3}{\EA[unit=3](P\v){Q\v}}
+		
+		\SetVertexLabel
+		\WE[Lpos=180](P2){s}
+		\EA(Q2){t}
+		\foreach \v in{1,2,3}{\Edge[label=$\ell(x)$, labelstyle={above}](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+	
+		
+		\foreach \v in{1,2,3}{\Edge(s)(P\v)}  %  s-P Kanten
+		\foreach \v in{1,2,3}{\Edge(Q\v)(t)}  %  Q-t Kanten
+		% Rückkanten
+		\Edge(Q1)(P2)
+		\Edge(Q2)(P3)
+	\end{tikzpicture}
+	\caption{Beispielnetzwerk mit $m=3$}
+	\end{figure}
+	
+	Flusswert $v(\mathcal G) = mZ$ mit $Z = \argmax \ell'(x)/\ell(x) \cdot x$ \\
+	Flusswert vom bösartigen Spieler $w(\mathcal G) = \epsilon v = \epsilon m Z$
+\end{frame}
+
+\begin{frame}{Bösartiger Fluss $g$}
+	Um die Kosten zu maximieren, nutzt der bösartige Spieler alle Kanten, deren Kostenfunktion nicht konstant ist (Auslastung $\epsilon m Z$):
+	\begin{figure}
+		\begin{tikzpicture}
+		\SetGraphUnit{2}
+		\GraphInit[vstyle=Classic]
+		\SetUpEdge[style={->, thick}, color=gray]
+		\tikzset{LabelStyle/.style = {fill=none}}
+		\SetVertexNoLabel
+		\Vertex{P1}
+		\SO(P1){P2}
+		\SO(P2){P3}
+		
+		\foreach \v in{1,2,3}{\EA[unit=3](P\v){Q\v}}
+		
+		\SetVertexLabel
+		\WE[Lpos=180](P2){s}
+		\EA(Q2){t}
+		\foreach \v in{1,2,3}{\Edge[labelstyle={above}](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+		
+		
+		\foreach \v in{1,2,3}{\Edge(s)(P\v)}  %  s-P Kanten
+		\foreach \v in{1,2,3}{\Edge(Q\v)(t)}  %  Q-t Kanten
+		% Rückkanten
+		\Edge(Q1)(P2)
+		\Edge(Q2)(P3)
+		
+		% Bösartiger Fluss
+		\draw [red, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (P3) (Q3) (t)};
+		\end{tikzpicture}
+	\end{figure}
+	Induzierte Latenzfunktion $\ell^g(x) = \ell(x + \epsilon m Z)$
+\end{frame}
+
+\begin{frame}{Nashfluss $f$}
+	Rationale Spieler kontrollieren $(1- \epsilon)mZ$ Fluss
+	\begin{figure}
+		\begin{tikzpicture}
+		\SetGraphUnit{2}
+		\GraphInit[vstyle=Classic]
+		\SetUpEdge[style={->, thick}, color=gray]
+		\tikzset{LabelStyle/.style = {fill=none, color=gray}}
+		\SetVertexNoLabel
+		\Vertex{P1}
+		\SO(P1){P2}
+		\SO(P2){P3}
+		
+		\foreach \v in{1,2,3}{\EA[unit=3](P\v){Q\v}}
+		
+		\SetVertexLabel
+		\WE[Lpos=180](P2){s}
+		\EA(Q2){t}
+		\foreach \v in{1,2,3}{\Edge[label=$\ell(x + \epsilon v)$, labelstyle={above}](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+		\foreach \v in{1,2,3}{\Edge(s)(P\v)}  %  s-P Kanten
+		\foreach \v in{1,2,3}{\Edge(Q\v)(t)}  %  Q-t Kanten
+		% Rückkanten
+		\Edge(Q1)(P2)
+		\Edge(Q2)(P3)
+		
+		%Pfad
+		\draw [blue, ultra thick] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
+		\draw [blue, ultra thick] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+		\draw [blue, ultra thick, ->] plot [smooth] coordinates{(s) (P3) (Q3) (t)};
+		\end{tikzpicture}
+	\end{figure}
+	Auf den blauen Pfaden ist der Fluss $(1- \epsilon)Z$, sonst $0$. Damit ist die Auslastung an den mittleren Kanten: $\textcolor{blue}{f(e)} + \textcolor{red}{g(e)} = (1- \epsilon)Z + \epsilon m Z = Z + \epsilon (m-1) Z$
+\end{frame}
+
+\begin{frame}{Berechnung PoM}
+	Auslastung der mittleren Kanten: $Z + \epsilon Z (m-1)$
+	
+	Damit ist die Latenz der blauen Pfade $L(P) = \ell (Z + \epsilon (m-1) Z)$.
+	Da $f$ der einzige Nashflus ist, ist der Nashdelay $D(\mathcal G, v) = L(P)$.
+	Für $\epsilon = 0$ erhalten wir den Nashdelay $D(\mathcal G) = \ell(Z)$.
+	\begin{align*}
+		POM(\mathcal G) &= \lim_{\epsilon \to 0^+} \dfrac{D(\mathcal G, \epsilon v) - D(\mathcal G)}{\epsilon D(\mathcal G)} \\
+			&= \lim_{\epsilon \to 0^+} \dfrac{\ell (Z + \epsilon (m-1) Z) - \ell(Z)}{\epsilon \ell(Z)} \\
+			&= \dfrac{(m - 1) Z \ell'(Z)}{\ell(Z)} \\
+			&= d \cdot (m - 1)
+	\end{align*}
+\end{frame}
+
+
+\section{Windfall of Malice}
+\begin{frame}{Beispielgraph mit negativer PoM}
+	\begin{columns}[T]
+		\begin{column}{0.6\textwidth}
+			\begin{tikzpicture}
+				\SetGraphUnit{2}
+				\GraphInit[vstyle=Classic]
+				\SetUpEdge[style={->, thick}, color=gray]
+				\tikzset{LabelStyle/.style = {fill=none, sloped, above}}
+				
+				% Knoten
+				\Vertices[unit=3]{circle}{t,p,s,q}
+				\EA[Lpos=180](s){m}
+				\EA[unit=2](m){n}
+				
+				% Kanten
+				\Edge[label=$D_1(x)$](s)(p)
+				\Edge[label=$D_1(x)$](q)(t)
+				\Edge[label=$1$](s)(q)
+				\Edge[label=$1$](p)(t)
+				\Edge[label=$0$](p)(n)
+				\Edge[label=$0$](m)(n)
+				\Edge[label=$0$](m)(q)
+				\Edge[label=$D_2(x)$](p)(m)
+				\Edge[label=$D_2(x)$](n)(q)
+			\end{tikzpicture}
+		\end{column}
+	
+		\begin{column}{0.4\textwidth}
+			$D_1(x) = x^d/2$ \\
+			$D_2(x) = (2x)^d/2$
+			
+			Flusswert $v = 1$ \\
+			Bösartiger $w = \epsilon$
+			
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Bösartiger Fluss}
+	\begin{tikzpicture}
+		\SetGraphUnit{2}
+		\GraphInit[vstyle=Classic]
+		\SetUpEdge[style={->, thick}, color=gray]
+		\tikzset{LabelStyle/.style = {fill=none, sloped, above, color=gray}}
+		
+		% Knoten
+		\Vertices[unit=3]{circle}{t,p,s,q}
+		\EA[Lpos=180](s){m}
+		\EA[unit=2](m){n}
+		
+		% Kanten
+		\Edge[label=$D_1(x)$](s)(p)
+		\Edge[label=$D_1(x)$](q)(t)
+		\Edge[label=$1$](s)(q)
+		\Edge[label=$1$](p)(t)
+		\Edge[label=$0$](p)(n)
+		\Edge[label=$0$](m)(n)
+		\Edge[label=$0$](m)(q)
+		\Edge[label=$D_2(x)$](p)(m)
+		\Edge[label=$D_2(x)$](n)(q)
+		
+		% Bösartiger Fluss
+		\draw [red, ultra thick, ->] plot [smooth] coordinates{(s) (p) (m) (n) (q) (t)};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Nashflow der rationalen Spieler}
+	\begin{columns}[T]
+		\begin{column}{0.5\textwidth}
+			\begin{figure}
+				\begin{tikzpicture}
+				\SetGraphUnit{2}
+				\GraphInit[vstyle=Classic]
+				\SetUpEdge[style={->, thick}, color=gray]
+				\tikzset{LabelStyle/.style = {fill=none, sloped, above, color=gray, font=\sffamily\footnotesize}}
+				
+				% Knoten
+				\Vertices[unit=3]{circle}{t,p,s,q}
+				\EA[Lpos=180](s){m}
+				\EA[unit=2](m){n}
+				
+				% Kanten
+				\Edge[label=$D_1(x)$](s)(p)
+				\Edge[label=$D_1(x)$](q)(t)
+				\Edge[label=$1$](s)(q)
+				\Edge[label=$1$](p)(t)
+				\Edge[label=$0$](p)(n)
+				\Edge[label=$0$](m)(n)
+				\Edge[label=$0$](m)(q)
+				\Edge[label=$D_2(x)$](p)(m)
+				\Edge[label=$D_2(x)$](n)(q)
+				
+				% Auslastungen
+				\tikzset{LabelStyle/.style = {fill=none, sloped, below, color=blue}}
+				\Edge[label=$a(\epsilon)$](s)(p)
+				\Edge[label=$a(\epsilon)$](q)(t)
+				\Edge[label=$a(\epsilon) - 2 b(\epsilon)$](s)(q)
+				\Edge[label=$a(\epsilon) - 2 b(\epsilon)$](p)(t)
+				\Edge[label=$b(\epsilon)$](p)(n)
+				
+				\Edge[label=$b(\epsilon)$](m)(q)
+				\Edge[label=$b(\epsilon)$](p)(m)
+				\Edge[label=$b(\epsilon)$](n)(q)
+			\end{tikzpicture}
+			\end{figure}
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			$1-\epsilon$ Fluss zu verteilen
+			
+			 Für $\epsilon = 0$:
+			 $a(\epsilon) = 1, b(\epsilon) = 1/2$
+			 $D(\mathcal G) = 1.5$
+			
+		\end{column}
+	\end{columns}
+	
+\end{frame}
+
+
+\section{Abschluss}
+\begin{frame}{Zusammenfassung}
+	\begin{itemize}
+		\item 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Offene Fragen}
+	\begin{itemize}
+		\item Strikte Schranken für 
+		\begin{itemize}
+			\item Price of Malice
+			\item Windfall of Malice
+		\end{itemize}
+		\item Charakterisierung von Netzwerken
+		\item Ist das Finden von Equilibria PPAD-complete?
+	\end{itemize}
+\end{frame}
+\end{document}
