@@ -6,8 +6,8 @@
 
 \usetheme{metropolis}           % Use metropolis theme
 %standard packages
-%\usepackage[utf8]{inputenc}
-\usepackage[english,ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
 \usepackage{physics}
 \usepackage{mathtools}
 \usepackage{tkz-graph}
@@ -21,6 +21,14 @@
 %settings
 \setsansfont[BoldFont={Fira Sans SemiBold}]{Fira Sans Book} % für shitty Projektoren
 
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
 %standard init
 \title{Auslastungsspiele mit bösartigen Spielern}
 \subtitle{Congestion games with malicious players}
@@ -29,9 +37,6 @@
 \institute{Lehrstuhl i1 -- RWTH Aachen}
 
 \begin{document}
-\maketitle
-
-\section{Einführung in Auslastungsspiele}
 \begin{frame}{Anmerkungen}
 	\begin{itemize}
 		\item Wie genau muss ich Auslastungsspiele vorstellen? Wie viel ist bekannt?
@@ -43,11 +48,22 @@
 			\item Nashfluss
 			\item Windfall of Malice
 		\end{itemize}
-	\item Overlays fehlen
-	\item Beispiele fehlen
+		\item Overlays fehlen
+		\item Beispiele fehlen
 	\end{itemize}
 \end{frame}
 
+\maketitle
+
+\setbeamerfont{subsection in toc}{size=\scriptsize}
+\setbeamertemplate{section in toc}[sections numbered]
+
+\begin{frame}{Table of Contents}
+	\tableofcontents
+\end{frame}
+
+
+\section{Einführung in Auslastungsspiele}
 % Zu langer Text?
 \begin{frame}{Auslastungsspiel}
 	\begin{block}{Szenario}
@@ -100,6 +116,35 @@
 	\end{align*} 
 \end{frame}
 
+\begin{frame}{Beispiel (fortgesetzt)}
+	\begin{tikzpicture}
+		\SetGraphUnit{2}
+		\GraphInit[vstyle=Classic]
+		\SetUpEdge[style={->, thick}, color=gray]
+		\tikzset{LabelStyle/.style = {fill=none}}
+		\SetVertexNoLabel
+		\Vertex{P1}
+		\SO(P1){P2}
+		
+		\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
+		
+		\SetVertexLabel
+		\WE[Lpos=180](P1){s}
+		\EA(Q2){t}
+		\foreach \v in{1,2}{\Edge[label=$x$, labelstyle={above}](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+		
+		
+		\foreach \v in{1,2}{\Edge(s)(P\v)}  %  s-P Kanten
+		\foreach \v in{1,2}{\Edge(Q\v)(t)}  %  Q-t Kanten
+		% Rückkanten
+		\Edge(Q1)(P2)
+		
+		% Fluss
+		\draw [blue, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
+		\draw [green, ultra thick, ->, visible on=<3->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+	\end{tikzpicture}
+\end{frame}
+
 \begin{frame}{Nashfluss}
 	Sei $f$ ein gültiger Fluss auf $\mathcal G$. 
 	Der Fluss $f$ ist ein \alert{Nash-Fluss}, wenn für alle $P, P' \in \Pi$ und $f(P) > 0$ gilt
@@ -116,7 +161,35 @@
 		Jeder Nashfluss hat die gleichen Kosten $C(f)$. \\
 		Für alle Pfade $P$ mit $f(P) > 0$ ist $L(P) = D(f)$, wenn $f$ Nashfluss.
 	\end{block}
+\end{frame}
 
+\begin{frame}{Beispiel (fortgesetzt)}
+	\begin{tikzpicture}
+	\SetGraphUnit{2}
+	\GraphInit[vstyle=Classic]
+	\SetUpEdge[style={->, thick}, color=gray]
+	\tikzset{LabelStyle/.style = {fill=none}}
+	\SetVertexNoLabel
+	\Vertex{P1}
+	\SO(P1){P2}
+	
+	\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
+	
+	\SetVertexLabel
+	\WE[Lpos=180](P1){s}
+	\EA(Q2){t}
+	\foreach \v in{1,2}{\Edge[label=$x$, labelstyle={above}](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+	
+	
+	\foreach \v in{1,2}{\Edge(s)(P\v)}  %  s-P Kanten
+	\foreach \v in{1,2}{\Edge(Q\v)(t)}  %  Q-t Kanten
+	% Rückkanten
+	\Edge(Q1)(P2)
+	
+	% Fluss
+	\draw [blue, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
+	\draw [green, ultra thick, ->, visible on=<3->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+	\end{tikzpicture}
 \end{frame}
 
 \begin{frame}{Bekanntes über Auslastungsspiele}
@@ -144,6 +217,10 @@
 	\[ \ell_e^\gamma(x) = \mathbb E[\ell_e(x+ g(e))] .\]
 \end{frame}
 
+\begin{frame}{Beispiel (fortgesetzt)}
+	Frame
+\end{frame}
+
 \begin{frame}{Malicious Best Response}
 	Für einen Fluss $f$ (der rationalen Spieler) im Spiel $\mathcal G$ ist die \alert{bösartige beste Antwort} zu $f$ die Menge der Flüsse
 	\[ MBR(f) = \argmax_{g \in F(\mathcal G, w)} \, C^g(f) .\]
@@ -160,6 +237,10 @@
 	\[
 		\sup \left\{\frac{C^\gamma(f)}{|f|} : (f,\gamma) \text{ ist ein Equilibrium} \right\}
 	\]
+\end{frame}
+
+\begin{frame}{Beispiel (fortgesetzt)}
+	Frame
 \end{frame}
 
 \begin{frame}{Price of Malice}
