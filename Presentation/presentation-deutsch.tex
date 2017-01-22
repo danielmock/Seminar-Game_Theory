@@ -4,11 +4,11 @@
 \usefonttheme{professionalfonts}
 \DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n} % alte mathcal symbole
 
-\usetheme{metropolis}           % Use metropolis theme
+%\usetheme{metropolis}           % Use metropolis theme
 %standard packages
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
-\usepackage{physics}
+%\usepackage{physics}
 \usepackage{mathtools}
 \usepackage{tkz-graph}
 \usepackage{booktabs}
@@ -19,7 +19,7 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
 %settings
-\setsansfont[BoldFont={Fira Sans SemiBold}]{Fira Sans Book} % für shitty Projektoren
+%\setsansfont[BoldFont={Fira Sans SemiBold}]{Fira Sans Book} % für shitty Projektoren
 
 \tikzset{
 	invisible/.style={opacity=0},
@@ -49,7 +49,7 @@
 			\item Windfall of Malice
 		\end{itemize}
 		\item Overlays fehlen
-		\item Beispiele fehlen
+		\item Beispiele nur rudimentär
 	\end{itemize}
 \end{frame}
 
@@ -58,7 +58,7 @@
 \setbeamerfont{subsection in toc}{size=\scriptsize}
 \setbeamertemplate{section in toc}[sections numbered]
 
-\begin{frame}{Table of Contents}
+\begin{frame}{Inhaltsverzeichnis}
 	\tableofcontents
 \end{frame}
 
@@ -98,7 +98,7 @@
 \begin{frame}{Fluss}
 	Ein \alert{Fluss} ist eine Abbildung $f: \Pi \to \mathbb R^+$. 
 	
-	Der \alert{Wert} eines Flusses ist \[ \abs{f} = \sum_{P \in \Pi} f(P) \]
+	Der \alert{Wert} eines Flusses ist \[ |{f}| = \sum_{P \in \Pi} f(P) \]
 	
 	Die Menge aller Flüsse mit Wert $v$ im Spiel $\mathcal G$ ist $F(\mathcal G, v)$.
 	
@@ -116,12 +116,14 @@
 	\end{align*} 
 \end{frame}
 
-\begin{frame}{Beispiel (fortgesetzt)}
-	\begin{tikzpicture}
+\begin{frame}{Beispiel}
+	Spiel auf dem Graphen mit $v = 1$.
+	\begin{figure}
+		\begin{tikzpicture}
 		\SetGraphUnit{2}
 		\GraphInit[vstyle=Classic]
 		\SetUpEdge[style={->, thick}, color=gray]
-		\tikzset{LabelStyle/.style = {fill=none}}
+		\tikzset{LabelStyle/.style = {fill=none, above}}
 		\SetVertexNoLabel
 		\Vertex{P1}
 		\SO(P1){P2}
@@ -131,18 +133,40 @@
 		\SetVertexLabel
 		\WE[Lpos=180](P1){s}
 		\EA(Q2){t}
-		\foreach \v in{1,2}{\Edge[label=$x$, labelstyle={above}](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+		\foreach \v in{1,2}{\Edge[label=$x^2$](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
 		
 		
-		\foreach \v in{1,2}{\Edge(s)(P\v)}  %  s-P Kanten
-		\foreach \v in{1,2}{\Edge(Q\v)(t)}  %  Q-t Kanten
+		\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
+		\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
 		% Rückkanten
-		\Edge(Q1)(P2)
+		\Edge[label=$0$](Q1)(P2)
 		
 		% Fluss
 		\draw [blue, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
 		\draw [green, ultra thick, ->, visible on=<3->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+		\draw [red, ultra thick, ->, visible on=<4->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
 	\end{tikzpicture}
+	\end{figure}
+	
+	\begin{columns}[T]
+		\begin{column}{0.3\textwidth}
+			Flusswerte:
+			\begin{itemize}
+				\item<2-> \textcolor{blue}{f(blau) = $0.1$}
+				\item<3-> \textcolor{green}{f(grün) = $0.7$}
+				\item<4-> \textcolor{red}{f(rot) = $0.2$}
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.7\textwidth}
+			Latenzen:
+			\begin{itemize}
+				\item<5-> \textcolor{blue}{L(blau)} = $(0.1 + 0.2)^2 + (0.1 + 0.7)^2$
+				\item<5-> \textcolor{green}{L(grün)} = $0.1^2 + 0.7^2$
+				\item<5-> \textcolor{red}{L(rot)} =
+				\item<6-> Kosten $C(f)$ = $0.1 \cdot L(\text{blau}) + 0.7 \cdot L(\text{grün}) + 0.2 \cdot L(\text{rot})$
+			\end{itemize}
+		\end{column}
+	\end{columns}
 \end{frame}
 
 \begin{frame}{Nashfluss}
@@ -178,7 +202,7 @@
 	\SetVertexLabel
 	\WE[Lpos=180](P1){s}
 	\EA(Q2){t}
-	\foreach \v in{1,2}{\Edge[label=$x$, labelstyle={above}](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+	\foreach \v in{1,2}{\Edge[label=$x^2$, labelstyle={above}](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
 	
 	
 	\foreach \v in{1,2}{\Edge(s)(P\v)}  %  s-P Kanten
@@ -187,8 +211,8 @@
 	\Edge(Q1)(P2)
 	
 	% Fluss
-	\draw [blue, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
-	\draw [green, ultra thick, ->, visible on=<3->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+	\draw [blue, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
+	\draw [green, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
 	\end{tikzpicture}
 \end{frame}
 
@@ -218,7 +242,64 @@
 \end{frame}
 
 \begin{frame}{Beispiel (fortgesetzt)}
-	Frame
+	Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
+	\begin{figure}
+		\begin{tikzpicture}
+		\SetGraphUnit{2}
+		\GraphInit[vstyle=Classic]
+		\SetUpEdge[style={->, thick}, color=gray]
+		\tikzset{LabelStyle/.style = {fill=none, above}}
+		\SetVertexNoLabel
+		\Vertex{P1}
+		\SO(P1){P2}
+		
+		\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
+		
+		\SetVertexLabel
+		\WE[Lpos=180](P1){s}
+		\EA(Q2){t}
+		\foreach \v in{1,2}{\Edge[label=$x^2$](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+		
+		
+		\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
+		\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
+		% Rückkanten
+		\Edge[label=$0$](Q1)(P2)
+		
+		% Fluss
+		\draw [red, ultra thick, ->, visible on=<1->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
+		\end{tikzpicture}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Beispiel (fortgesetzt)}
+	Dann haben wir ein induziertes Spiel $G^g = (E, \ell^g(x), \Pi, v-w = \textcolor{red}{0.8})$:
+	\begin{figure}
+		\begin{tikzpicture}
+		\SetGraphUnit{2}
+		\GraphInit[vstyle=Classic]
+		\SetUpEdge[style={->, thick}, color=gray]
+		\tikzset{LabelStyle/.style = {fill=none, above}}
+		\SetVertexNoLabel
+		\Vertex{P1}
+		\SO(P1){P2}
+		
+		\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
+		
+		\SetVertexLabel
+		\WE[Lpos=180](P1){s}
+		\EA(Q2){t}
+		\Edge[label=$(x + 0.2)^2$, labelstyle={red}](P1)(Q1) %  P-Q Kanten mit l(x)
+		\Edge[label=$x^2$](P2)(Q2)
+		
+		\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
+		\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
+		% Rückkanten
+		\Edge[label=$0$](Q1)(P2)
+		
+		% Fluss
+		\end{tikzpicture}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Malicious Best Response}
@@ -248,7 +329,7 @@
 	Dann ist der \alert{Price of Malice} definiert durch
 	\begin{align*}
 		POM(f) &= \lim_{\epsilon \to 0^+} \dfrac{D(\mathcal G, \epsilon v) - D(\mathcal G)}{\epsilon D(\mathcal G)}  \\
-		&= \frac{1}{D(\mathcal G)} \cdot \dv{\epsilon}(D(\mathcal G, v \epsilon))_{(\epsilon = 0)}.
+		&= \frac{1}{D(\mathcal G)} \cdot \frac{d}{d \epsilon}(D(\mathcal G, v \epsilon))_{(\epsilon = 0)}.
 	\end{align*}
 \end{frame}
 
@@ -386,7 +467,7 @@
 		\draw [blue, ultra thick, ->] plot [smooth] coordinates{(s) (P3) (Q3) (t)};
 		\end{tikzpicture}
 	\end{figure}
-	Auf den blauen Pfaden ist der Fluss $(1- \epsilon)Z$, sonst $0$. Damit ist die Auslastung an den mittleren Kanten: $\textcolor{blue}{f(e)} + \textcolor{red}{g(e)} = (1- \epsilon)Z + \epsilon m Z = Z + \epsilon (m-1) Z$
+	Auf den blauen Pfaden ist der Fluss $(1- \epsilon)Z$, sonst $0$. Damit ist die Auslastung an den mittleren Kanten: $\textcolor{blue}{f(e)} + \textcolor{red}{g(e)} = (1 - \epsilon)Z + \epsilon m Z = Z + \epsilon (m-1) Z$
 \end{frame}
 
 \begin{frame}{Berechnung PoM}
@@ -405,10 +486,11 @@
 
 
 \section{Windfall of Malice}
-\begin{frame}{Beispielgraph mit negativer PoM}
+
+\begin{frame}{Netzwerk}
 	\begin{columns}[T]
-		\begin{column}{0.6\textwidth}
-			\begin{tikzpicture}
+		\begin{column}{0.5\textwidth}
+			\begin{tikzpicture}[scale=0.7]
 				\SetGraphUnit{2}
 				\GraphInit[vstyle=Classic]
 				\SetUpEdge[style={->, thick}, color=gray]
@@ -416,112 +498,252 @@
 				
 				% Knoten
 				\Vertices[unit=3]{circle}{t,p,s,q}
-				\EA[Lpos=180](s){m}
-				\EA[unit=2](m){n}
 				
 				% Kanten
-				\Edge[label=$D_1(x)$](s)(p)
-				\Edge[label=$D_1(x)$](q)(t)
+				\Edge[label=$x/2$](s)(p)
+				\Edge[label=$x/2$](q)(t)
 				\Edge[label=$1$](s)(q)
 				\Edge[label=$1$](p)(t)
-				\Edge[label=$0$](p)(n)
-				\Edge[label=$0$](m)(n)
-				\Edge[label=$0$](m)(q)
-				\Edge[label=$D_2(x)$](p)(m)
-				\Edge[label=$D_2(x)$](n)(q)
 			\end{tikzpicture}
+			Flusswert $v=1$
 		\end{column}
 	
-		\begin{column}{0.4\textwidth}
-			$D_1(x) = x^d/2$ \\
-			$D_2(x) = (2x)^d/2$
-			
-			Flusswert $v = 1$ \\
-			Bösartiger $w = \epsilon$
-			
+		\begin{column}{0.5\textwidth}
+			  \begin{tikzpicture}[scale=0.7]
+				  \SetGraphUnit{2}
+				  \GraphInit[vstyle=Classic]
+				  \SetUpEdge[style={->, thick}, color=gray]
+				  \tikzset{LabelStyle/.style = {fill=none, sloped, above}}
+				  
+				  % Knoten
+				  \Vertices[unit=3]{circle}{t,p,s,q}
+				  
+				  % Kanten
+				  \Edge[label=$x/2$](s)(p)
+				  \Edge[label=$x/2$](q)(t)
+				  \Edge[label=$1$](s)(q)
+				  \Edge[label=$1$](p)(t)
+				  
+				  % Nashfluss
+				  \SetUpEdge[style={->, thick}, color=green]
+				  \tikzset{LabelStyle/.style = {below, sloped, fill=none, color=green}}
+				  \Edges[label=$1/2$](s,p,t)
+				  \Edges[label=$1/2$](s,q,t)
+			  \end{tikzpicture}
+			  Nashfluss mit $D(f) = 1.25$
 		\end{column}
 	\end{columns}
 \end{frame}
 
-\begin{frame}{Bösartiger Fluss}
-	\begin{tikzpicture}
-		\SetGraphUnit{2}
-		\GraphInit[vstyle=Classic]
-		\SetUpEdge[style={->, thick}, color=gray]
-		\tikzset{LabelStyle/.style = {fill=none, sloped, above, color=gray}}
-		
-		% Knoten
-		\Vertices[unit=3]{circle}{t,p,s,q}
-		\EA[Lpos=180](s){m}
-		\EA[unit=2](m){n}
-		
-		% Kanten
-		\Edge[label=$D_1(x)$](s)(p)
-		\Edge[label=$D_1(x)$](q)(t)
-		\Edge[label=$1$](s)(q)
-		\Edge[label=$1$](p)(t)
-		\Edge[label=$0$](p)(n)
-		\Edge[label=$0$](m)(n)
-		\Edge[label=$0$](m)(q)
-		\Edge[label=$D_2(x)$](p)(m)
-		\Edge[label=$D_2(x)$](n)(q)
-		
-		% Bösartiger Fluss
-		\draw [red, ultra thick, ->] plot [smooth] coordinates{(s) (p) (m) (n) (q) (t)};
-	\end{tikzpicture}
-\end{frame}
-
-\begin{frame}{Nashflow der rationalen Spieler}
+\begin{frame}{Braess' Paradoxon}
 	\begin{columns}[T]
 		\begin{column}{0.5\textwidth}
-			\begin{figure}
-				\begin{tikzpicture}
+			\begin{tikzpicture}[scale=0.7]
 				\SetGraphUnit{2}
 				\GraphInit[vstyle=Classic]
 				\SetUpEdge[style={->, thick}, color=gray]
-				\tikzset{LabelStyle/.style = {fill=none, sloped, above, color=gray, font=\sffamily\footnotesize}}
+				\tikzset{LabelStyle/.style = {fill=none, sloped, above, color=gray}}
 				
-				% Knoten
+			 Knoten
 				\Vertices[unit=3]{circle}{t,p,s,q}
 				\EA[Lpos=180](s){m}
 				\EA[unit=2](m){n}
 				
-				% Kanten
-				\Edge[label=$D_1(x)$](s)(p)
-				\Edge[label=$D_1(x)$](q)(t)
+			 Kanten
+				\Edge[label=$x/2$](s)(p)
+				\Edge[label=$x/2$](q)(t)
 				\Edge[label=$1$](s)(q)
 				\Edge[label=$1$](p)(t)
 				\Edge[label=$0$](p)(n)
 				\Edge[label=$0$](m)(n)
 				\Edge[label=$0$](m)(q)
-				\Edge[label=$D_2(x)$](p)(m)
-				\Edge[label=$D_2(x)$](n)(q)
-				
-				% Auslastungen
-				\tikzset{LabelStyle/.style = {fill=none, sloped, below, color=blue}}
-				\Edge[label=$a(\epsilon)$](s)(p)
-				\Edge[label=$a(\epsilon)$](q)(t)
-				\Edge[label=$a(\epsilon) - 2 b(\epsilon)$](s)(q)
-				\Edge[label=$a(\epsilon) - 2 b(\epsilon)$](p)(t)
-				\Edge[label=$b(\epsilon)$](p)(n)
-				
-				\Edge[label=$b(\epsilon)$](m)(q)
-				\Edge[label=$b(\epsilon)$](p)(m)
-				\Edge[label=$b(\epsilon)$](n)(q)
+				\Edge[label=$x$](p)(m)
+				\Edge[label=$x$](n)(q)
 			\end{tikzpicture}
-			\end{figure}
 		\end{column}
+		
 		\begin{column}{0.5\textwidth}
-			$1-\epsilon$ Fluss zu verteilen
+			\begin{tikzpicture}[scale=0.7]
+			\SetGraphUnit{2}
+			\GraphInit[vstyle=Classic]
+			\SetUpEdge[style={->, thick}, color=gray]
+			\tikzset{LabelStyle/.style = {fill=none, sloped, above, color=gray}}
 			
-			 Für $\epsilon = 0$:
-			 $a(\epsilon) = 1, b(\epsilon) = 1/2$
-			 $D(\mathcal G) = 1.5$
+			% Knoten
+			\Vertices[unit=3]{circle}{t,p,s,q}
+			\EA[Lpos=180](s){m}
+			\EA[unit=2](m){n}
 			
+			% Kanten
+			\Edge(s)(p)
+			\Edge(q)(t)
+			\Edge(s)(q)
+			\Edge(p)(t)
+			\Edge(p)(n)
+			\Edge(m)(n)
+			\Edge(m)(q)
+			\Edge(p)(m)
+			\Edge(n)(q)
+			
+			% Nashfluss
+			\SetUpEdge[style={->, thick}, color=green]
+			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=green}}
+			\Edge[label=$1$](s)(p)
+			\Edge[label=$1$](q)(t)
+			\Edges[label=$1/2$](p,m,q)
+			\Edges[label=$1/2$](p,n,q)
+			\end{tikzpicture}
+			Nashfluss mit $D(f) = 1.5$
 		\end{column}
 	\end{columns}
-	
 \end{frame}
+
+\begin{frame}{Umkehrung durch bösartig Spieler}
+	\begin{columns}[T]
+		\begin{column}{0.5\textwidth}
+			\begin{tikzpicture}[scale=0.7]
+			\SetGraphUnit{2}
+			\GraphInit[vstyle=Classic]
+			\SetUpEdge[style={->, thick}, color=gray]
+			\tikzset{LabelStyle/.style = {fill=none, sloped, above, color=gray}}
+			
+			% Knoten
+			\Vertices[unit=3]{circle}{t,p,s,q}
+			\EA[Lpos=180](s){m}
+			\EA[unit=2](m){n}
+			
+			% Kanten
+			\Edge(s)(p)
+			\Edge(q)(t)
+			\Edge(s)(q)
+			\Edge(p)(t)
+			\Edge(p)(n)
+			\Edge(m)(n)
+			\Edge(m)(q)
+			\Edge(p)(m)
+			\Edge(n)(q)
+			
+			% Nashfluss
+			\SetUpEdge[style={->, thick}, color=red]
+			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=red}}
+			\Edges[label=$\epsilon$](s,p,m,n,q,t)
+			\end{tikzpicture}
+			MBR $g$ mit $w = \epsilon$
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			\begin{tikzpicture}[scale=0.7]
+			\SetGraphUnit{2}
+			\GraphInit[vstyle=Classic]
+			\SetUpEdge[style={->, thick}, color=gray]
+			\tikzset{LabelStyle/.style = {fill=none, sloped, above, color=gray}}
+			
+			% Knoten
+			\Vertices[unit=3]{circle}{t,p,s,q}
+			\EA[Lpos=180](s){m}
+			\EA[unit=2](m){n}
+			
+			% Kanten
+			\Edge(s)(p)
+			\Edge(q)(t)
+			\Edge(s)(q)
+			\Edge(p)(t)
+			\Edge(p)(n)
+			\Edge(m)(n)
+			\Edge(m)(q)
+			\Edge(p)(m)
+			\Edge(n)(q)
+			
+			% Nashfluss
+			\SetUpEdge[style={->, thick}, color=red]
+			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=red}}
+			\Edges[label=$\epsilon$](s,p,m,n,q,t)
+			\end{tikzpicture}
+			Nashflow in $\mathcal G^g$.
+			Nashdelay wird immer besser
+		\end{column}
+	\end{columns}
+\end{frame}
+
+%
+%\begin{frame}{Bösartiger Fluss}
+%	\begin{tikzpicture}
+%		\SetGraphUnit{2}
+%		\GraphInit[vstyle=Classic]
+%		\SetUpEdge[style={->, thick}, color=gray]
+%		\tikzset{LabelStyle/.style = {fill=none, sloped, above, color=gray}}
+%		
+%		% Knoten
+%		\Vertices[unit=3]{circle}{t,p,s,q}
+%%		\EA[Lpos=180](s){m}
+%%		\EA[unit=2](m){n}
+%		
+%		% Kanten
+%		\Edge[label=$x$](s)(p)
+%		\Edge[label=$x$](q)(t)
+%		\Edge[label=$1$](s)(q)
+%		\Edge[label=$1$](p)(t)
+%%		\Edge[label=$0$](p)(n)
+%%		\Edge[label=$0$](m)(n)
+%%		\Edge[label=$0$](m)(q)
+%%		\Edge[label=$D_2(x)$](p)(m)
+%%		\Edge[label=$D_2(x)$](n)(q)
+%		
+%		% Bösartiger Fluss
+%%		\draw [red, ultra thick, ->] plot [smooth] coordinates{(s) (p) (m) (n) (q) (t)};
+%	\end{tikzpicture}
+%\end{frame}
+
+%\begin{frame}{Nashflow der rationalen Spieler}
+%	\begin{columns}[T]
+%		\begin{column}{0.5\textwidth}
+%			\begin{figure}
+%				\begin{tikzpicture}
+%				\SetGraphUnit{2}
+%				\GraphInit[vstyle=Classic]
+%				\SetUpEdge[style={->, thick}, color=gray]
+%				\tikzset{LabelStyle/.style = {fill=none, sloped, above, color=gray, font=\sffamily\footnotesize}}
+%				
+%				% Knoten
+%				\Vertices[unit=3]{circle}{t,p,s,q}
+%				\EA[Lpos=180](s){m}
+%				\EA[unit=2](m){n}
+%				
+%				% Kanten
+%				\Edge[label=$D_1(x)$](s)(p)
+%				\Edge[label=$D_1(x)$](q)(t)
+%				\Edge[label=$1$](s)(q)
+%				\Edge[label=$1$](p)(t)
+%				\Edge[label=$0$](p)(n)
+%				\Edge[label=$0$](m)(n)
+%				\Edge[label=$0$](m)(q)
+%				\Edge[label=$D_2(x)$](p)(m)
+%				\Edge[label=$D_2(x)$](n)(q)
+%				
+%				% Auslastungen
+%				\tikzset{LabelStyle/.style = {fill=none, sloped, below, color=blue}}
+%				\Edge[label=$a(\epsilon)$](s)(p)
+%				\Edge[label=$a(\epsilon)$](q)(t)
+%				\Edge[label=$a(\epsilon) - 2 b(\epsilon)$](s)(q)
+%				\Edge[label=$a(\epsilon) - 2 b(\epsilon)$](p)(t)
+%				\Edge[label=$b(\epsilon)$](p)(n)
+%				
+%				\Edge[label=$b(\epsilon)$](m)(q)
+%				\Edge[label=$b(\epsilon)$](p)(m)
+%				\Edge[label=$b(\epsilon)$](n)(q)
+%			\end{tikzpicture}
+%			\end{figure}
+%		\end{column}
+%		\begin{column}{0.5\textwidth}
+%			$1-\epsilon$ Fluss zu verteilen
+%			
+%			 Für $\epsilon = 0$:
+%			 $a(\epsilon) = 1, b(\epsilon) = 1/2$
+%			 $D(\mathcal G) = 1.5$
+%			
+%		\end{column}
+%	\end{columns}
+%	
+%\end{frame}
 
 
 \section{Abschluss}
