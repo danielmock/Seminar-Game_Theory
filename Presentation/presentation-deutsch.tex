@@ -5,10 +5,10 @@
 \DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n} % alte mathcal symbole
 
 \usetheme{metropolis}           % Use metropolis theme
+
 %standard packages
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
-%\usepackage{physics}
 \usepackage{mathtools}
 \usepackage{tkz-graph}
 \usepackage{booktabs}
@@ -20,6 +20,8 @@
 \DeclareMathOperator*{\argmax}{arg\,max}
 %settings
 %\setsansfont[BoldFont={Fira Sans SemiBold}]{Fira Sans Book} % für shitty Projektoren
+
+%\setlist[itemize]{noitemsep, topsep=0pt}
 
 \tikzset{
 	invisible/.style={opacity=0},
@@ -48,8 +50,7 @@
 			\item Nashfluss
 			\item Windfall of Malice
 		\end{itemize}
-		\item Overlays fehlen
-		\item Beispiele nur rudimentär
+		\item Feintuning bei Farben und Graphenbeschriftungen notwendig
 	\end{itemize}
 \end{frame}
 
@@ -88,9 +89,9 @@
 \begin{frame}{Definition Auslastungsspiel}
 	Ein symmetrisches, nicht-atomares \alert{Auslastungsspiel} $\mathcal G = (E, \vec{\ell}, \Pi, v)$
 	\begin{itemize}
-		\item $E$: Kantenmenge
-		\item $\vec{\ell}$: Vektor von Latenzfunktionen $\ell_e : \mathbb R_+ \to \mathbb R_+$ für jede Kante $e$
-		\item $\Pi$ Pfadmenge
+		\item $E$ Kantenmenge
+		\item $\vec{\ell}$ Vektor von Latenzfunktionen $\ell_e : \mathbb R_+ \to \mathbb R_+$ für jede Kante $e$
+		\item $\Pi$ Menge der $s-t$-Pfade
 		\item $v$ erzielter Flusswert
 	\end{itemize}
 \end{frame}
@@ -98,11 +99,11 @@
 \begin{frame}{Fluss}
 	Ein \alert{Fluss} ist eine Abbildung $f: \Pi \to \mathbb R^+$. 
 	
-	Der \alert{Wert} eines Flusses ist \[ |{f}| = \sum_{P \in \Pi} f(P) \]
+	Der \alert{Wert} eines Flusses ist \[ |{f}| = \sum_{P \in \Pi} f(P) . \]
 	
 	Die Menge aller Flüsse mit Wert $v$ im Spiel $\mathcal G$ ist $F(\mathcal G, v)$.
 	
-	Die Auslastung an einer Kante $e$ ist \[ f(e) = \sum_{\mathclap{P \in \Pi: e \in P}} f(P) \]
+	Die Auslastung an einer Kante $e$ ist \[ f(e) = \sum_{\mathclap{P \in \Pi: e \in P}} f(P) . \]
 \end{frame}
 
 \begin{frame}{Kosten}
@@ -133,7 +134,8 @@
 		\SetVertexLabel
 		\WE[Lpos=180](P1){s}
 		\EA(Q2){t}
-		\foreach \v in{1,2}{\Edge[label=$x^2$](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+		\Edge[label=$x^2$, labelstyle={above}](P1)(Q1)
+		\Edge[label=$x$, labelstyle={above}](P2)(Q2)
 		
 		
 		\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
@@ -150,23 +152,42 @@
 	
 	\begin{columns}[T]
 		\begin{column}{0.3\textwidth}
-			Flusswerte:
-			\begin{itemize}
-				\item<2-> \textcolor{blue}{f(blau) = $0.1$}
-				\item<3-> \textcolor{green}{f(grün) = $0.7$}
-				\item<4-> \textcolor{red}{f(rot) = $0.2$}
-			\end{itemize}
+			\only<1-5>{
+				\textbf{Flusswerte}:
+				\begin{itemize}
+					\item<2-> $f(\text{\textcolor{blue}{blau}}) = 0.1$
+					\item<3-> $f(\text{\textcolor{green}{grün}}) = 0.7$
+					\item<4-> $f(\text{\textcolor{red}{rot}}) = 0.2$
+				\end{itemize} }
+			
+			\only<6->{
+				\textbf{Auslastungen}:
+				\begin{itemize}
+					\item $f(a) = 0.3$
+					\item $f(b) = 0.8$
+				\end{itemize} }
 		\end{column}
 		\begin{column}{0.7\textwidth}
-			Latenzen:
-			\begin{itemize}
-				\item<5-> \textcolor{blue}{L(blau)} = $(0.1 + 0.2)^2 + (0.1 + 0.7)^2$
-				\item<5-> \textcolor{green}{L(grün)} = $0.1^2 + 0.7^2$
-				\item<5-> \textcolor{red}{L(rot)} =
-				\item<6-> Kosten $C(f)$ = $0.1 \cdot L(\text{blau}) + 0.7 \cdot L(\text{grün}) + 0.2 \cdot L(\text{rot})$
-			\end{itemize}
+			\only<5>{
+				\textbf{Auslastungen}:
+				\begin{itemize}
+					\item $f(a) = 0.1 + 0.2 = 0.3$
+					\item $f(b) = 0.7 + 0.1 = 0.8$
+			\end{itemize} }
+			
+			\only<6->{
+				\textbf{Latenzen}:
+				\begin{itemize}
+					\item<6-> $L(\text{\textcolor{blue}{blau}}) = f(a)^2 + f(b)$
+					\item<6-> $L(\text{\textcolor{green}{grün}}) = f(b)$
+					\item<6-> $L(\text{\textcolor{red}{rot}}) = f(a)^2$
+				\end{itemize} }
 		\end{column}
 	\end{columns}
+
+	\only<7->{
+		\textbf{Kosten}: \\
+		 $C(f)$ = $0.1 \cdot L(\text{blau}) + 0.7 \cdot L(\text{grün}) + 0.2 \cdot L(\text{rot})$ }
 \end{frame}
 
 \begin{frame}{Nashfluss}
@@ -187,7 +208,7 @@
 	\end{block}
 \end{frame}
 
-\begin{frame}{Beispiel (fortgesetzt)}
+\begin{frame}{Nashfluss im Beispiel}
 	\begin{tikzpicture}
 	\SetGraphUnit{2}
 	\GraphInit[vstyle=Classic]
@@ -202,7 +223,9 @@
 	\SetVertexLabel
 	\WE[Lpos=180](P1){s}
 	\EA(Q2){t}
-	\foreach \v in{1,2}{\Edge[label=$x^2$, labelstyle={above}](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+	\Edge[label=$x^2$, labelstyle={above}](P1)(Q1)
+	\Edge[label=$x$, labelstyle={above}](P2)(Q2)
+	 %  P-Q Kanten mit l(x)
 	
 	
 	\foreach \v in{1,2}{\Edge(s)(P\v)}  %  s-P Kanten
@@ -214,6 +237,25 @@
 	\draw [blue, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
 	\draw [green, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
 	\end{tikzpicture}
+
+	\begin{columns}[T]
+		\begin{column}{0.4\textwidth}
+			Nashfluss $f$:
+			\begin{itemize}
+				\item $f(blau) = \frac{-1 + \sqrt{5}}{2} $
+				\item $f(\text{grün}) = \frac{3 - \sqrt{5}}{2} $
+				\item $f(rot) = 0 $
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.6\textwidth}
+			Delays der Pfade:
+			\begin{itemize}
+				\item $L(blau) = \frac{3 - \sqrt{5}}{2}$
+				\item $L(\text{grün}) = \frac{3 - \sqrt{5}}{2}$
+				\item $L(rot) = 3- \sqrt{5}$
+			\end{itemize}
+		\end{column}
+	\end{columns}
 \end{frame}
 
 \begin{frame}{Bekanntes über Auslastungsspiele}
@@ -237,11 +279,11 @@
 \begin{frame}{Induziertes Spiel}
 	Sei $\mathcal G = (E, \vec{\ell}, \Pi, v)$, $\gamma$ eine W'keitverteilung auf $F(\mathcal G, w)$ und Fluss $g$ eine Probe aus $\gamma$. 
 	
-	Dann ist $\mathcal G^\gamma = (E, \vec{\ell^\gamma}, \Pi, v-w)$ ein \alert{induziertes Spiel} mit 
+	Dann ist $\mathcal G^\gamma = (E, \vec{\ell}^\gamma, \Pi, v-w)$ ein \alert{induziertes Spiel} mit 
 	\[ \ell_e^\gamma(x) = \mathbb E[\ell_e(x+ g(e))] .\]
 \end{frame}
 
-\begin{frame}{Beispiel (fortgesetzt)}
+\begin{frame}{Beispiel: Bösartiger Fluss}
 	Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 	\begin{figure}
 		\begin{tikzpicture}
@@ -258,7 +300,8 @@
 		\SetVertexLabel
 		\WE[Lpos=180](P1){s}
 		\EA(Q2){t}
-		\foreach \v in{1,2}{\Edge[label=$x^2$](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+		\Edge[label=$x^2$, labelstyle={above}](P1)(Q1)
+		\Edge[label=$x$, labelstyle={above}](P2)(Q2)
 		
 		
 		\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
@@ -273,7 +316,7 @@
 \end{frame}
 
 \begin{frame}{Beispiel (fortgesetzt)}
-	Dann haben wir ein induziertes Spiel $G^g = (E, \ell^g(x), \Pi, v-w = \textcolor{red}{0.8})$:
+	Durch bösartigen Fluss $g$ induziertes Spiel $G^g = (E, \ell^g(x), \Pi, v-w = \textcolor{red}{0.8})$:
 	\begin{figure}
 		\begin{tikzpicture}
 		\SetGraphUnit{2}
@@ -290,7 +333,7 @@
 		\WE[Lpos=180](P1){s}
 		\EA(Q2){t}
 		\Edge[label=$(x + 0.2)^2$, labelstyle={red}](P1)(Q1) %  P-Q Kanten mit l(x)
-		\Edge[label=$x^2$](P2)(Q2)
+		\Edge[label=$x$](P2)(Q2)
 		
 		\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
 		\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
@@ -320,8 +363,69 @@
 	\]
 \end{frame}
 
-\begin{frame}{Beispiel (fortgesetzt)}
-	Frame
+\begin{frame}{Equilibrium im Beispiel}
+	Betrachte Spiel mit $v=1$ und $w=0.2$:
+	
+	\begin{figure}
+		\begin{tikzpicture}
+			\SetGraphUnit{2}
+			\GraphInit[vstyle=Classic]
+			\SetUpEdge[style={->, thick}, color=gray]
+			\tikzset{LabelStyle/.style = {fill=none, above}}
+			\SetVertexNoLabel
+			\Vertex{P1}
+			\SO(P1){P2}
+			
+			\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
+			
+			\SetVertexLabel
+			\WE[Lpos=180](P1){s}
+			\EA(Q2){t}
+			\Edge[label=$x^2$, labelstyle={above}](P1)(Q1)
+			\Edge[label=$x$, labelstyle={above}](P2)(Q2)
+			
+			
+			\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
+			\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
+			% Rückkanten
+			\Edge[label=$0$](Q1)(P2)
+			
+			% Fluss
+			\draw [red, ultra thick, ->, visible on=<1->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
+		\end{tikzpicture}
+	\end{figure}
+	Unabhängig von $f$ die MBR von ist $g$.
+\end{frame}
+
+\begin{frame}{Equilibrium im Beispiel}
+	Betrachte induziertes Spiel mit $v-w=0.8$:
+	
+	\begin{figure}
+		\begin{tikzpicture}
+		\SetGraphUnit{2}
+		\GraphInit[vstyle=Classic]
+		\SetUpEdge[style={->, thick}, color=gray]
+		\tikzset{LabelStyle/.style = {fill=none, above}}
+		\SetVertexNoLabel
+		\Vertex{P1}
+		\SO(P1){P2}
+		
+		\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
+		
+		\SetVertexLabel
+		\WE[Lpos=180](P1){s}
+		\EA(Q2){t}
+		\Edge[label=$(x+0.2)^2$, labelstyle={above}](P1)(Q1)
+		\Edge[label=$x+0.2$, labelstyle={above}](P2)(Q2)
+		
+		
+		\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
+		\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
+		% Rückkanten
+		\Edge[label=$0$](Q1)(P2)
+		\end{tikzpicture}
+	\end{figure}
+	TODO: Berechne Equilibrium
 \end{frame}
 
 \begin{frame}{Price of Malice}
@@ -507,7 +611,7 @@
 			\end{tikzpicture}
 			Flusswert $v=1$
 		\end{column}
-	
+		\pause
 		\begin{column}{0.5\textwidth}
 			  \begin{tikzpicture}[scale=0.7]
 				  \SetGraphUnit{2}
@@ -561,7 +665,7 @@
 				\Edge[label=$x$](n)(q)
 			\end{tikzpicture}
 		\end{column}
-		
+		\pause
 		\begin{column}{0.5\textwidth}
 			\begin{tikzpicture}[scale=0.7]
 			\SetGraphUnit{2}
@@ -628,8 +732,10 @@
 			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=red}}
 			\Edges[label=$\epsilon$](s,p,m,n,q,t)
 			\end{tikzpicture}
-			MBR $g$ mit $w = \epsilon$
+			MBR $g$ mit $w = \epsilon$ \\
+			$g$ ''verstopft'' den Pfad des Nashflows
 		\end{column}
+		\pause
 		\begin{column}{0.5\textwidth}
 			\begin{tikzpicture}[scale=0.7]
 			\SetGraphUnit{2}
@@ -643,23 +749,27 @@
 			\EA[unit=2](m){n}
 			
 			% Kanten
-			\Edge(s)(p)
-			\Edge(q)(t)
-			\Edge(s)(q)
-			\Edge(p)(t)
-			\Edge(p)(n)
+%			\Edge(s)(p)
+%			\Edge(q)(t)
+%			\Edge(s)(q)
+%			\Edge(p)(t)
+%			\Edge(p)(n)
 			\Edge(m)(n)
-			\Edge(m)(q)
-			\Edge(p)(m)
-			\Edge(n)(q)
+%			\Edge(m)(q)
+%			\Edge(p)(m)
+%			\Edge(n)(q)
 			
 			% Nashfluss
-			\SetUpEdge[style={->, thick}, color=red]
+			\SetUpEdge[style={->, thick}, color=green]
 			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=red}}
-			\Edges[label=$\epsilon$](s,p,m,n,q,t)
+			\Edges(p,m,q)
+			\Edges(p,n,q)
+			\SetUpEdge[style={->, ultra thick}, color=green]
+			\Edges(s,q,t)
+			\Edges(s,p,t)
 			\end{tikzpicture}
-			Nashflow in $\mathcal G^g$.
-			Nashdelay wird immer besser
+			Nashflow wird ''nach außen'' gedrängt. \\
+			$D(\mathcal G, \epsilon) \to 1.25$
 		\end{column}
 	\end{columns}
 \end{frame}
