@@ -19,10 +19,23 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
 %settings
-%\setsansfont[BoldFont={Fira Sans SemiBold}]{Fira Sans Book} % für shitty Projektoren
+\setsansfont[BoldFont={Fira Sans SemiBold}]{Fira Sans Book} % für shitty Projektoren
 
-%\setlist[itemize]{noitemsep, topsep=0pt}
+% Color Palette by Tol
+\definecolor{TolDarkPurple}{HTML}{332288}
+\definecolor{TolDarkBlue}{HTML}{6699CC}
+\definecolor{TolLightBlue}{HTML}{88CCEE}
+\definecolor{TolLightGreen}{HTML}{44AA99}
+\definecolor{TolDarkGreen}{HTML}{117733}
+\definecolor{TolDarkBrown}{HTML}{999933}
+\definecolor{TolLightBrown}{HTML}{DDCC77}
+\definecolor{TolDarkRed}{HTML}{661100}
+\definecolor{TolLightRed}{HTML}{CC6677}
+\definecolor{TolLightPink}{HTML}{AA4466}
+\definecolor{TolDarkPink}{HTML}{882255}
+\definecolor{TolLightPurple}{HTML}{AA4499}
 
+% Tikz Set for on-visible
 \tikzset{
 	invisible/.style={opacity=0},
 	visible on/.style={alt={#1{}{invisible}}},
@@ -44,7 +57,7 @@
 		\item Wie genau muss ich Auslastungsspiele vorstellen? Wie viel ist bekannt?
 		\item Wie ich welche Begriffe übersetze, ist noch offen
 		\begin{itemize}
-			\item MBR
+			\item BBR
 			\item Delay
 			\item malicious = bösartig
 			\item Nashfluss
@@ -59,13 +72,7 @@
 \setbeamerfont{subsection in toc}{size=\scriptsize}
 \setbeamertemplate{section in toc}[sections numbered]
 
-\begin{frame}{Inhaltsverzeichnis}
-	\tableofcontents
-\end{frame}
-
-
 \section{Einführung in Auslastungsspiele}
-% Zu langer Text?
 \begin{frame}{Auslastungsspiel}
 	\begin{block}{Szenario}
 		\begin{itemize}
@@ -77,15 +84,18 @@
 		\end{itemize}
 	\end{block}
 
-	\begin{block}{Später: schädliche Spieler}
+	\begin{block}{Später: bösartige Spieler \emph{(malicious players)}}
 		\begin{itemize}
-			\item ein Teil des Flusses wird von schädlichen Spielern kontrolliert
+			\item ein Teil des Flusses wird von bösartigen Spielern kontrolliert
 			\item Ziel: Maximieren der Kosten
 		\end{itemize}
 	\end{block}
 \end{frame}
 
-% formatierung der Definitionen nicht einheitlich
+\begin{frame}{Inhaltsverzeichnis}
+	\tableofcontents
+\end{frame}
+
 \begin{frame}{Definition Auslastungsspiel}
 	Ein symmetrisches, nicht-atomares \alert{Auslastungsspiel} $\mathcal G = (E, \vec{\ell}, \Pi, v)$
 	\begin{itemize}
@@ -94,6 +104,34 @@
 		\item $\Pi$ Menge der $s-t$-Pfade
 		\item $v$ erzielter Flusswert
 	\end{itemize}
+\end{frame}
+
+\begin{frame}{Beispiel}
+	\begin{figure}
+		\begin{tikzpicture}
+		\SetGraphUnit{2}
+		\GraphInit[vstyle=Classic]
+		\SetUpEdge[style={->, thick}, color=gray]
+		\tikzset{LabelStyle/.style = {fill=none, above}}
+		\SetVertexNoLabel
+		\Vertex{P1}
+		\SO(P1){P2}
+		
+		\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
+		
+		\SetVertexLabel
+		\WE[Lpos=180](P1){s}
+		\EA(Q2){t}
+		\Edge[label=$x^2$, labelstyle={above}](P1)(Q1)
+		\Edge[label=$x$, labelstyle={above}](P2)(Q2)
+		
+		
+		\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
+		\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
+		% Rückkanten
+		\Edge[label=$0$](Q1)(P2)
+		\end{tikzpicture}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Fluss}
@@ -144,9 +182,9 @@
 		\Edge[label=$0$](Q1)(P2)
 		
 		% Fluss
-		\draw [blue, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
-		\draw [green, ultra thick, ->, visible on=<3->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
-		\draw [red, ultra thick, ->, visible on=<4->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
+		\draw [blue, ultra thick, ->, visible on=<2->, opacity=0.5] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
+		\draw [green, ultra thick, ->, visible on=<3->, opacity=0.5] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+		\draw [red, ultra thick, ->, visible on=<4->, opacity=0.5] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
 	\end{tikzpicture}
 	\end{figure}
 	
@@ -178,16 +216,16 @@
 			\only<6->{
 				\textbf{Latenzen}:
 				\begin{itemize}
-					\item<6-> $L(\text{\textcolor{blue}{blau}}) = f(a)^2 + f(b)$
-					\item<6-> $L(\text{\textcolor{green}{grün}}) = f(b)$
-					\item<6-> $L(\text{\textcolor{red}{rot}}) = f(a)^2$
+					\item<6-> $L(\text{\textcolor{blue}{blau}}) = f(a)^2 + f(b) = 0.89$
+					\item<6-> $L(\text{\textcolor{green}{grün}}) = f(b) = 0.8$
+					\item<6-> $L(\text{\textcolor{red}{rot}}) = f(a)^2 = 0.09$
 				\end{itemize} }
 		\end{column}
 	\end{columns}
 
 	\only<7->{
 		\textbf{Kosten}: \\
-		 $C(f)$ = $0.1 \cdot L(\text{blau}) + 0.7 \cdot L(\text{grün}) + 0.2 \cdot L(\text{rot})$ }
+		 $C(f)$ = $0.1 \cdot L(\text{blau}) + 0.7 \cdot L(\text{grün}) + 0.2 \cdot L(\text{rot}) = 0.667$ }
 \end{frame}
 
 \begin{frame}{Nashfluss}
@@ -209,50 +247,52 @@
 \end{frame}
 
 \begin{frame}{Nashfluss im Beispiel}
-	\begin{tikzpicture}
-	\SetGraphUnit{2}
-	\GraphInit[vstyle=Classic]
-	\SetUpEdge[style={->, thick}, color=gray]
-	\tikzset{LabelStyle/.style = {fill=none}}
-	\SetVertexNoLabel
-	\Vertex{P1}
-	\SO(P1){P2}
-	
-	\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
-	
-	\SetVertexLabel
-	\WE[Lpos=180](P1){s}
-	\EA(Q2){t}
-	\Edge[label=$x^2$, labelstyle={above}](P1)(Q1)
-	\Edge[label=$x$, labelstyle={above}](P2)(Q2)
-	 %  P-Q Kanten mit l(x)
-	
-	
-	\foreach \v in{1,2}{\Edge(s)(P\v)}  %  s-P Kanten
-	\foreach \v in{1,2}{\Edge(Q\v)(t)}  %  Q-t Kanten
-	% Rückkanten
-	\Edge(Q1)(P2)
-	
-	% Fluss
-	\draw [blue, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
-	\draw [green, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
-	\end{tikzpicture}
+	\begin{figure}
+		\begin{tikzpicture}
+			\SetGraphUnit{2}
+			\GraphInit[vstyle=Classic]
+			\SetUpEdge[style={->, thick}, color=gray]
+			\tikzset{LabelStyle/.style = {fill=none}}
+			\SetVertexNoLabel
+			\Vertex{P1}
+			\SO(P1){P2}
+			
+			\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
+			
+			\SetVertexLabel
+			\WE[Lpos=180](P1){s}
+			\EA(Q2){t}
+			\Edge[label=$x^2$, labelstyle={above}](P1)(Q1)
+			\Edge[label=$x$, labelstyle={above}](P2)(Q2)
+			 %  P-Q Kanten mit l(x)
+			
+			
+			\foreach \v in{1,2}{\Edge(s)(P\v)}  %  s-P Kanten
+			\foreach \v in{1,2}{\Edge(Q\v)(t)}  %  Q-t Kanten
+			% Rückkanten
+			\Edge(Q1)(P2)
+			
+			% Fluss
+			\draw [red, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
+			\draw [green, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+		\end{tikzpicture}
+	\end{figure}
 
 	\begin{columns}[T]
-		\begin{column}{0.4\textwidth}
+		\begin{column}{0.5\textwidth}
 			Nashfluss $f$:
 			\begin{itemize}
-				\item $f(blau) = \frac{-1 + \sqrt{5}}{2} $
-				\item $f(\text{grün}) = \frac{3 - \sqrt{5}}{2} $
-				\item $f(rot) = 0 $
+				\item $f(\text{blau}) = 0 $
+				\item $f(\text{grün}) = \frac{3 - \sqrt{5}}{2} \approx 0.38$
+				\item $f(\text{rot}) = \frac{-1 + \sqrt{5}}{2} \approx 0.62 $
 			\end{itemize}
 		\end{column}
-		\begin{column}{0.6\textwidth}
+		\begin{column}{0.5\textwidth}
 			Delays der Pfade:
 			\begin{itemize}
-				\item $L(blau) = \frac{3 - \sqrt{5}}{2}$
+				\item $L(\text{blau}) = 3- \sqrt{5} $
 				\item $L(\text{grün}) = \frac{3 - \sqrt{5}}{2}$
-				\item $L(rot) = 3- \sqrt{5}$
+				\item $L(\text{rot}) = \frac{3 - \sqrt{5}}{2}$
 			\end{itemize}
 		\end{column}
 	\end{columns}
@@ -276,43 +316,36 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Induziertes Spiel}
-	Sei $\mathcal G = (E, \vec{\ell}, \Pi, v)$, $\gamma$ eine W'keitverteilung auf $F(\mathcal G, w)$ und Fluss $g$ eine Probe aus $\gamma$. 
-	
-	Dann ist $\mathcal G^\gamma = (E, \vec{\ell}^\gamma, \Pi, v-w)$ ein \alert{induziertes Spiel} mit 
-	\[ \ell_e^\gamma(x) = \mathbb E[\ell_e(x+ g(e))] .\]
-\end{frame}
-
 \begin{frame}{Beispiel: Bösartiger Fluss}
-	Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
-	\begin{figure}
-		\begin{tikzpicture}
-		\SetGraphUnit{2}
-		\GraphInit[vstyle=Classic]
-		\SetUpEdge[style={->, thick}, color=gray]
-		\tikzset{LabelStyle/.style = {fill=none, above}}
-		\SetVertexNoLabel
-		\Vertex{P1}
-		\SO(P1){P2}
-		
-		\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
-		
-		\SetVertexLabel
-		\WE[Lpos=180](P1){s}
-		\EA(Q2){t}
-		\Edge[label=$x^2$, labelstyle={above}](P1)(Q1)
-		\Edge[label=$x$, labelstyle={above}](P2)(Q2)
-		
-		
-		\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
-		\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
-		% Rückkanten
-		\Edge[label=$0$](Q1)(P2)
-		
-		% Fluss
-		\draw [red, ultra thick, ->, visible on=<1->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
-		\end{tikzpicture}
-	\end{figure}
+Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
+\begin{figure}
+	\begin{tikzpicture}
+	\SetGraphUnit{2}
+	\GraphInit[vstyle=Classic]
+	\SetUpEdge[style={->, thick}, color=gray]
+	\tikzset{LabelStyle/.style = {fill=none, above}}
+	\SetVertexNoLabel
+	\Vertex{P1}
+	\SO(P1){P2}
+	
+	\foreach \v in{1,2}{\EA[unit=3](P\v){Q\v}}
+	
+	\SetVertexLabel
+	\WE[Lpos=180](P1){s}
+	\EA(Q2){t}
+	\Edge[label=$x^2$, labelstyle={above}](P1)(Q1)
+	\Edge[label=$x$, labelstyle={above}](P2)(Q2)
+	
+	
+	\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
+	\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
+	% Rückkanten
+	\Edge[label=$0$](Q1)(P2)
+	
+	% Fluss
+	\draw [red, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
+	\end{tikzpicture}
+\end{figure}
 \end{frame}
 
 \begin{frame}{Beispiel (fortgesetzt)}
@@ -339,21 +372,27 @@
 		\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
 		% Rückkanten
 		\Edge[label=$0$](Q1)(P2)
-		
-		% Fluss
 		\end{tikzpicture}
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Malicious Best Response}
-	Für einen Fluss $f$ (der rationalen Spieler) im Spiel $\mathcal G$ ist die \alert{bösartige beste Antwort} zu $f$ die Menge der Flüsse
-	\[ MBR(f) = \argmax_{g \in F(\mathcal G, w)} \, C^g(f) .\]
+\begin{frame}{Induziertes Spiel}
+	Sei $\mathcal G = (E, \vec{\ell}, \Pi, v)$, $\gamma$ eine W'keitverteilung auf $F(\mathcal G, w)$ und Fluss $g$ eine Probe aus $\gamma$. 
 	
-	Eine W'keitsverteilung $\gamma$ auf $F(\mathcal G, w)$ ist ein MBR zu $f$, wenn ein Träger von $\gamma$ in $MBR(f)$ liegt.
+	Dann ist $\mathcal G^\gamma = (E, \vec{\ell}^\gamma, \Pi, v-w)$ ein \alert{induziertes Spiel} mit 
+	\[ \ell_e^\gamma(x) = \mathbb E[\ell_e(x+ g(e))] .\]
+\end{frame}
+
+
+\begin{frame}{Malicious Best Response}
+	Für einen Fluss $f$ (der rationalen Spieler) im Spiel $\mathcal G$ ist die \alert{beste bösartige Reaktion} \emph{(malicious best response)} zu $f$ die Menge der Flüsse
+	\[ BBR(f) = \argmax_{g \in F(\mathcal G, w)} \, C^g(f) .\]
+	
+	Eine W'keitsverteilung $\gamma$ auf $F(\mathcal G, w)$ ist ein BBR zu $f$, wenn ein Träger von $\gamma$ in $BBR(f)$ liegt.
 \end{frame}
 
 \begin{frame}{Equilibrium}
-	Für ein Spiel $\mathcal G$ mit einem bösartigen Spieler ist $(f, \gamma)$ ein (semi-pures) \alert{Equilibrium}, wenn $f$ ein Nashfluss im induziertem Spiel $\mathcal G^\gamma$ und $\gamma$ eine MBR zu $f$ ist. 
+	Für ein Spiel $\mathcal G$ mit einem bösartigen Spieler ist $(f, \gamma)$ ein (semi-pures) \alert{Equilibrium}, wenn $f$ ein Nashfluss im induziertem Spiel $\mathcal G^\gamma$ und $\gamma$ eine BBR zu $f$ ist. 
 	
 	Das Equilibrium ist \alert{pur}, wenn $\gamma$ nur einen Träger besitzt.
 	
@@ -394,7 +433,7 @@
 			\draw [red, ultra thick, ->, visible on=<1->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
 		\end{tikzpicture}
 	\end{figure}
-	Unabhängig von $f$ die MBR von ist $g$.
+	Für jeden Fluss $f$ ist $g$ eine BBR.
 \end{frame}
 
 \begin{frame}{Equilibrium im Beispiel}
@@ -423,9 +462,14 @@
 		\foreach \v in{1,2}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
 		% Rückkanten
 		\Edge[label=$0$](Q1)(P2)
+		
+		
+		% Fluss
+		\draw [green, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
+		\draw [green, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
 		\end{tikzpicture}
 	\end{figure}
-	TODO: Berechne Equilibrium
+	Nashfluss $f$ mit $f(a) \approx 0.5$ und $f(b) \approx 0.3$.
 \end{frame}
 
 \begin{frame}{Price of Malice}
@@ -468,8 +512,9 @@
 			relative Slope & $0$      & $a$     & $a$        \\ \bottomrule
 		\end{tabular}
 	\end{table}
+	\pause
 	\begin{theorem}
-		Es existiert ein Spiel $\mathcal G$ mit $\mathcal O(m)$ Kanten, sodass der Price of Malice $d \cdot (m-1)$ beträgt, wobei $d$ der relative Slope der Kanten ist.
+		Es gibt ein Spiel $\mathcal G$ mit \alert{PoM $d \cdot (m-1)$} mit $\mathcal O(m)$ Kanten und maximalem relative Slope $d$.
 	\end{theorem}
 \end{frame}
 
@@ -589,7 +634,7 @@
 \end{frame}
 
 
-\section{Windfall of Malice}
+\section{Paradox der Bösartigkeit}
 
 \begin{frame}{Netzwerk}
 	\begin{columns}[T]
@@ -679,23 +724,20 @@
 			\EA[unit=2](m){n}
 			
 			% Kanten
-			\Edge(s)(p)
-			\Edge(q)(t)
 			\Edge(s)(q)
 			\Edge(p)(t)
-			\Edge(p)(n)
 			\Edge(m)(n)
-			\Edge(m)(q)
-			\Edge(p)(m)
-			\Edge(n)(q)
 			
 			% Nashfluss
 			\SetUpEdge[style={->, thick}, color=green]
-			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=green}}
+			\tikzset{LabelStyle/.style = {above, sloped, fill=none, color=green}}
 			\Edge[label=$1$](s)(p)
+			\Edge[label=$0.5$](p)(m)
+			\Edge[label=$0.5$](p)(n)
+			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=green}}
+			\Edge[label=$0.5$](m)(q)
+			\Edge[label=$0.5$](n)(q)
 			\Edge[label=$1$](q)(t)
-			\Edges[label=$1/2$](p,m,q)
-			\Edges[label=$1/2$](p,n,q)
 			\end{tikzpicture}
 			Nashfluss mit $D(f) = 1.5$
 		\end{column}
@@ -730,9 +772,9 @@
 			% Nashfluss
 			\SetUpEdge[style={->, thick}, color=red]
 			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=red}}
-			\Edges[label=$\epsilon$](s,p,m,n,q,t)
+			\Edges(s,p,m,n,q,t)
 			\end{tikzpicture}
-			MBR $g$ mit $w = \epsilon$ \\
+			BBR $g$ mit $w = \epsilon$ \\
 			$g$ ''verstopft'' den Pfad des Nashflows
 		\end{column}
 		\pause
@@ -860,18 +902,6 @@
 \begin{frame}{Zusammenfassung}
 	\begin{itemize}
 		\item 
-	\end{itemize}
-\end{frame}
-
-\begin{frame}{Offene Fragen}
-	\begin{itemize}
-		\item Strikte Schranken für 
-		\begin{itemize}
-			\item Price of Malice
-			\item Windfall of Malice
-		\end{itemize}
-		\item Charakterisierung von Netzwerken
-		\item Ist das Finden von Equilibria PPAD-complete?
 	\end{itemize}
 \end{frame}
 \end{document}
