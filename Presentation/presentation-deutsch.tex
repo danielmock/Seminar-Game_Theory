@@ -24,16 +24,20 @@
 % Color Palette by Tol
 \definecolor{TolDarkPurple}{HTML}{332288}
 \definecolor{TolDarkBlue}{HTML}{6699CC}
-\definecolor{TolLightBlue}{HTML}{88CCEE}
-\definecolor{TolLightGreen}{HTML}{44AA99}
+\definecolor{myBlue}{HTML}{88CCEE}
+\definecolor{myGreen}{HTML}{44AA99}
 \definecolor{TolDarkGreen}{HTML}{117733}
 \definecolor{TolDarkBrown}{HTML}{999933}
 \definecolor{TolLightBrown}{HTML}{DDCC77}
 \definecolor{TolDarkRed}{HTML}{661100}
-\definecolor{TolLightRed}{HTML}{CC6677}
+\definecolor{myRed}{HTML}{CC6677}
 \definecolor{TolLightPink}{HTML}{AA4466}
 \definecolor{TolDarkPink}{HTML}{882255}
 \definecolor{TolLightPurple}{HTML}{AA4499}
+
+\definecolor{myBlue}{HTML}{809BC8}
+\definecolor{myGreen}{HTML}{64C204}
+\definecolor{myRed}{HTML}{FF6666}
 
 % Tikz Set for on-visible
 \tikzset{
@@ -70,7 +74,7 @@
 \maketitle
 
 \setbeamerfont{subsection in toc}{size=\scriptsize}
-\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{section in toc}[sections numbemyRed]
 
 \section{Einführung in Auslastungsspiele}
 \begin{frame}{Auslastungsspiel}
@@ -182,9 +186,9 @@
 		\Edge[label=$0$](Q1)(P2)
 		
 		% Fluss
-		\draw [blue, ultra thick, ->, visible on=<2->, opacity=0.5] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
-		\draw [green, ultra thick, ->, visible on=<3->, opacity=0.5] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
-		\draw [red, ultra thick, ->, visible on=<4->, opacity=0.5] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
+		\draw [myBlue, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
+		\draw [myGreen, ultra thick, ->, visible on=<3->, opacity=0.75] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+		\draw [myRed, ultra thick, ->, visible on=<4->, opacity=0.75] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
 	\end{tikzpicture}
 	\end{figure}
 	
@@ -193,9 +197,9 @@
 			\only<1-5>{
 				\textbf{Flusswerte}:
 				\begin{itemize}
-					\item<2-> $f(\text{\textcolor{blue}{blau}}) = 0.1$
-					\item<3-> $f(\text{\textcolor{green}{grün}}) = 0.7$
-					\item<4-> $f(\text{\textcolor{red}{rot}}) = 0.2$
+					\item<2-> $f(\text{\textcolor{myBlue}{blau}}) = 0.1$
+					\item<3-> $f(\text{\textcolor{myGreen}{grün}}) = 0.7$
+					\item<4-> $f(\text{\textcolor{myRed}{rot}}) = 0.2$
 				\end{itemize} }
 			
 			\only<6->{
@@ -216,9 +220,9 @@
 			\only<6->{
 				\textbf{Latenzen}:
 				\begin{itemize}
-					\item<6-> $L(\text{\textcolor{blue}{blau}}) = f(a)^2 + f(b) = 0.89$
-					\item<6-> $L(\text{\textcolor{green}{grün}}) = f(b) = 0.8$
-					\item<6-> $L(\text{\textcolor{red}{rot}}) = f(a)^2 = 0.09$
+					\item<6-> $L(\text{\textcolor{myBlue}{blau}}) = f(a)^2 + f(b) = 0.89$
+					\item<6-> $L(\text{\textcolor{myGreen}{grün}}) = f(b) = 0.8$
+					\item<6-> $L(\text{\textcolor{myRed}{rot}}) = f(a)^2 = 0.09$
 				\end{itemize} }
 		\end{column}
 	\end{columns}
@@ -239,7 +243,7 @@
 		\item \emph{Nashkosten} $C(\mathcal G) := C(f)$
 		\item \emph{Nashdelay} $D(\mathcal G) := D(f) := C(f)/|f|$
 	\end{itemize}
-	
+	\pause
 	\begin{block}{Beobachtung}
 		Jeder Nashfluss hat die gleichen Kosten $C(f)$. \\
 		Für alle Pfade $P$ mit $f(P) > 0$ ist $L(P) = D(f)$, wenn $f$ Nashfluss.
@@ -273,8 +277,8 @@
 			\Edge(Q1)(P2)
 			
 			% Fluss
-			\draw [red, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
-			\draw [green, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+			\draw [myRed, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
+			\draw [myGreen, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
 		\end{tikzpicture}
 	\end{figure}
 
@@ -343,13 +347,13 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 	\Edge[label=$0$](Q1)(P2)
 	
 	% Fluss
-	\draw [red, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
+	\draw [myRed, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
 	\end{tikzpicture}
 \end{figure}
 \end{frame}
 
 \begin{frame}{Beispiel (fortgesetzt)}
-	Durch bösartigen Fluss $g$ induziertes Spiel $G^g = (E, \ell^g(x), \Pi, v-w = \textcolor{red}{0.8})$:
+	Durch bösartigen Fluss $g$ induziertes Spiel $G^g = (E, \ell^g(x), \Pi, v-w = \textcolor{myRed}{0.8})$:
 	\begin{figure}
 		\begin{tikzpicture}
 		\SetGraphUnit{2}
@@ -365,7 +369,7 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 		\SetVertexLabel
 		\WE[Lpos=180](P1){s}
 		\EA(Q2){t}
-		\Edge[label=$(x + 0.2)^2$, labelstyle={red}](P1)(Q1) %  P-Q Kanten mit l(x)
+		\Edge[label=$(x + 0.2)^2$, labelstyle={myRed}](P1)(Q1) %  P-Q Kanten mit l(x)
 		\Edge[label=$x$](P2)(Q2)
 		
 		\foreach \v in{1,2}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
@@ -430,7 +434,7 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 			\Edge[label=$0$](Q1)(P2)
 			
 			% Fluss
-			\draw [red, ultra thick, ->, visible on=<1->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
+			\draw [myRed, ultra thick, ->, visible on=<1->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
 		\end{tikzpicture}
 	\end{figure}
 	Für jeden Fluss $f$ ist $g$ eine BBR.
@@ -465,8 +469,8 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 		
 		
 		% Fluss
-		\draw [green, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
-		\draw [green, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+		\draw [myGreen, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
+		\draw [myGreen, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
 		\end{tikzpicture}
 	\end{figure}
 	Nashfluss $f$ mit $f(a) \approx 0.5$ und $f(b) \approx 0.3$.
@@ -579,7 +583,7 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 		\Edge(Q2)(P3)
 		
 		% Bösartiger Fluss
-		\draw [red, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (P3) (Q3) (t)};
+		\draw [myRed, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (P3) (Q3) (t)};
 		\end{tikzpicture}
 	\end{figure}
 	Induzierte Latenzfunktion $\ell^g(x) = \ell(x + \epsilon m Z)$
@@ -611,12 +615,12 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 		\Edge(Q2)(P3)
 		
 		%Pfad
-		\draw [blue, ultra thick] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
-		\draw [blue, ultra thick] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
-		\draw [blue, ultra thick, ->] plot [smooth] coordinates{(s) (P3) (Q3) (t)};
+		\draw [myBlue, ultra thick] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
+		\draw [myBlue, ultra thick] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+		\draw [myBlue, ultra thick, ->] plot [smooth] coordinates{(s) (P3) (Q3) (t)};
 		\end{tikzpicture}
 	\end{figure}
-	Auf den blauen Pfaden ist der Fluss $(1- \epsilon)Z$, sonst $0$. Damit ist die Auslastung an den mittleren Kanten: $\textcolor{blue}{f(e)} + \textcolor{red}{g(e)} = (1 - \epsilon)Z + \epsilon m Z = Z + \epsilon (m-1) Z$
+	Auf den blauen Pfaden ist der Fluss $(1- \epsilon)Z$, sonst $0$. Damit ist die Auslastung an den mittleren Kanten: $\textcolor{myBlue}{f(e)} + \textcolor{myRed}{g(e)} = (1 - \epsilon)Z + \epsilon m Z = Z + \epsilon (m-1) Z$
 \end{frame}
 
 \begin{frame}{Berechnung PoM}
@@ -661,7 +665,7 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 			  \begin{tikzpicture}[scale=0.7]
 				  \SetGraphUnit{2}
 				  \GraphInit[vstyle=Classic]
-				  \SetUpEdge[style={->, thick}, color=gray]
+				  \SetUpEdge[style={->, thick}, color=myGreen]
 				  \tikzset{LabelStyle/.style = {fill=none, sloped, above}}
 				  
 				  % Knoten
@@ -674,8 +678,8 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 				  \Edge[label=$1$](p)(t)
 				  
 				  % Nashfluss
-				  \SetUpEdge[style={->, thick}, color=green]
-				  \tikzset{LabelStyle/.style = {below, sloped, fill=none, color=green}}
+				  \SetUpEdge[style={->, thick}, color=myGreen]
+				  \tikzset{LabelStyle/.style = {below, sloped, fill=none, color=myGreen}}
 				  \Edges[label=$1/2$](s,p,t)
 				  \Edges[label=$1/2$](s,q,t)
 			  \end{tikzpicture}
@@ -729,12 +733,12 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 			\Edge(m)(n)
 			
 			% Nashfluss
-			\SetUpEdge[style={->, thick}, color=green]
-			\tikzset{LabelStyle/.style = {above, sloped, fill=none, color=green}}
+			\SetUpEdge[style={->, thick}, color=myGreen]
+			\tikzset{LabelStyle/.style = {above, sloped, fill=none, color=myGreen}}
 			\Edge[label=$1$](s)(p)
 			\Edge[label=$0.5$](p)(m)
 			\Edge[label=$0.5$](p)(n)
-			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=green}}
+			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=myGreen}}
 			\Edge[label=$0.5$](m)(q)
 			\Edge[label=$0.5$](n)(q)
 			\Edge[label=$1$](q)(t)
@@ -770,8 +774,8 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 			\Edge(n)(q)
 			
 			% Nashfluss
-			\SetUpEdge[style={->, thick}, color=red]
-			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=red}}
+			\SetUpEdge[style={->, thick}, color=myRed]
+			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=myRed}}
 			\Edges(s,p,m,n,q,t)
 			\end{tikzpicture}
 			BBR $g$ mit $w = \epsilon$ \\
@@ -802,11 +806,11 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 %			\Edge(n)(q)
 			
 			% Nashfluss
-			\SetUpEdge[style={->, thick}, color=green]
-			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=red}}
+			\SetUpEdge[style={->, thick}, color=myGreen]
+			\tikzset{LabelStyle/.style = {below, sloped, fill=none, color=myRed}}
 			\Edges(p,m,q)
 			\Edges(p,n,q)
-			\SetUpEdge[style={->, ultra thick}, color=green]
+			\SetUpEdge[style={->, ultra thick}, color=myGreen]
 			\Edges(s,q,t)
 			\Edges(s,p,t)
 			\end{tikzpicture}
@@ -841,7 +845,7 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 %%		\Edge[label=$D_2(x)$](n)(q)
 %		
 %		% Bösartiger Fluss
-%%		\draw [red, ultra thick, ->] plot [smooth] coordinates{(s) (p) (m) (n) (q) (t)};
+%%		\draw [myRed, ultra thick, ->] plot [smooth] coordinates{(s) (p) (m) (n) (q) (t)};
 %	\end{tikzpicture}
 %\end{frame}
 
@@ -872,7 +876,7 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 %				\Edge[label=$D_2(x)$](n)(q)
 %				
 %				% Auslastungen
-%				\tikzset{LabelStyle/.style = {fill=none, sloped, below, color=blue}}
+%				\tikzset{LabelStyle/.style = {fill=none, sloped, below, color=myBlue}}
 %				\Edge[label=$a(\epsilon)$](s)(p)
 %				\Edge[label=$a(\epsilon)$](q)(t)
 %				\Edge[label=$a(\epsilon) - 2 b(\epsilon)$](s)(q)
