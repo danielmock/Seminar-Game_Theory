@@ -381,10 +381,12 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 \end{frame}
 
 \begin{frame}{Induziertes Spiel}
-	Sei $\mathcal G = (E, \vec{\ell}, \Pi, v)$, $\gamma$ eine W'keitverteilung auf $F(\mathcal G, w)$ und Fluss $g$ eine Probe aus $\gamma$. 
+	Sei $\mathcal G = (E, \vec{\ell}, \Pi, v)$ und $g$ ein bösartiger Fluss aus $F(\mathcal G,w)$.
 	
 	Dann ist $\mathcal G^\gamma = (E, \vec{\ell}^\gamma, \Pi, v-w)$ ein \alert{induziertes Spiel} mit 
-	\[ \ell_e^\gamma(x) = \mathbb E[\ell_e(x+ g(e))] .\]
+	\[ \ell_e^\gamma(x) = \ell_e(x+ g(e)) .\]
+	
+	Auch definierbar für eine W'keitsverteilung $\gamma$ über den Erwartungswert.
 \end{frame}
 
 
@@ -396,13 +398,17 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 \end{frame}
 
 \begin{frame}{Equilibrium}
-	Für ein Spiel $\mathcal G$ mit einem bösartigen Spieler ist $(f, \gamma)$ ein (semi-pures) \alert{Equilibrium}, wenn $f$ ein Nashfluss im induziertem Spiel $\mathcal G^\gamma$ und $\gamma$ eine BBR zu $f$ ist. 
+	Für ein Spiel $\mathcal G$ ist $(f, g)$ ein \alert{pures Equilibrium}, wenn 
+	\begin{itemize}
+		\item $f$ ist Nashfluss im induziertem Spiel $\mathcal G^g$
+		\item $g$ ist BBR zu $f$.
+	\end{itemize}
 	
-	Das Equilibrium ist \alert{pur}, wenn $\gamma$ nur einen Träger besitzt.
+	Das Equilibrium ist \alert{semi-pur}, wenn W'keitverteilung $\gamma$ statt Fluss $g$ benutzt wird.
 	
 	Nashdelay $D(\mathcal G, w)$ ist
 	\[
-		\sup \left\{\frac{C^\gamma(f)}{|f|} : (f,\gamma) \text{ ist ein Equilibrium} \right\}
+		\sup \left\{\frac{C^g(f)}{|f|} : (f,g) \text{ ist ein Equilibrium} \right\}
 	\]
 \end{frame}
 
