@@ -56,20 +56,6 @@
 \institute{Lehrstuhl i1 -- RWTH Aachen}
 
 \begin{document}
-\begin{frame}{Anmerkungen}
-	\begin{itemize}
-		\item Wie genau muss ich Auslastungsspiele vorstellen? Wie viel ist bekannt?
-		\item Wie ich welche Begriffe übersetze, ist noch offen
-		\begin{itemize}
-			\item BBR
-			\item Delay
-			\item malicious = bösartig
-			\item Nashfluss
-			\item Windfall of Malice
-		\end{itemize}
-		\item Feintuning bei Farben und Graphenbeschriftungen notwendig
-	\end{itemize}
-\end{frame}
 
 \maketitle
 
@@ -111,6 +97,7 @@
 \end{frame}
 
 \begin{frame}{Beispiel}
+	Spiel $\mathcal G = (E, \vec{\ell}, \Pi, 1)$
 	\begin{figure}
 		\begin{tikzpicture}
 		\SetGraphUnit{2}
@@ -145,11 +132,11 @@
 	
 	Die Menge aller Flüsse mit Wert $v$ im Spiel $\mathcal G$ ist $F(\mathcal G, v)$.
 	
-	Die Auslastung an einer Kante $e$ ist \[ f(e) = \sum_{\mathclap{P \in \Pi: e \in P}} f(P) . \]
+	Die \alert{Auslastung} an einer Kante $e$ ist \[ f(e) = \sum_{\mathclap{P \in \Pi: e \in P}} f(P) . \]
 \end{frame}
 
 \begin{frame}{Kosten}
-	Der \alert{Delay} auf einem Pfad $P \in \Pi$ ist
+	Der \alert{Latenz} auf einem Pfad $P \in \Pi$ ist
 	\[ L(P) = \sum_{e \in P} \ell_e\left(f\left(e\right)\right). \]
 	
 	Die \alert{Kosten} eines Flusses $f$ sind
@@ -187,8 +174,8 @@
 		
 		% Fluss
 		\draw [myBlue, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
-		\draw [myGreen, ultra thick, ->, visible on=<3->, opacity=0.75] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
-		\draw [myRed, ultra thick, ->, visible on=<4->, opacity=0.75] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
+		\draw [myGreen, ultra thick, ->, opacity=0.75, visible on=<3->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+		\draw [myRed, ultra thick, ->, opacity=0.75, visible on=<4->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
 	\end{tikzpicture}
 	\end{figure}
 	
@@ -238,11 +225,14 @@
 	\[
 		L(P) \leq L(P').
 	\]
+	
+	\pause
 	Für einen Nashfluss $f$:
 	\begin{itemize}
 		\item \emph{Nashkosten} $C(\mathcal G) := C(f)$
 		\item \emph{Nashdelay} $D(\mathcal G) := D(f) := C(f)/|f|$
 	\end{itemize}
+
 	\pause
 	\begin{block}{Beobachtung}
 		Jeder Nashfluss hat die gleichen Kosten $C(f)$. \\
@@ -277,13 +267,13 @@
 			\Edge(Q1)(P2)
 			
 			% Fluss
-			\draw [myRed, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
-			\draw [myGreen, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+			\draw [myRed, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
+			\draw [myGreen, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
 		\end{tikzpicture}
 	\end{figure}
 
 	\begin{columns}[T]
-		\begin{column}{0.5\textwidth}
+		\begin{column}{0.5\textwidth}<2->
 			Nashfluss $f$:
 			\begin{itemize}
 				\item $f(\text{blau}) = 0 $
@@ -291,7 +281,7 @@
 				\item $f(\text{rot}) = \frac{-1 + \sqrt{5}}{2} \approx 0.62 $
 			\end{itemize}
 		\end{column}
-		\begin{column}{0.5\textwidth}
+		\begin{column}{0.5\textwidth}<3->
 			Delays der Pfade:
 			\begin{itemize}
 				\item $L(\text{blau}) = 3- \sqrt{5} $
@@ -383,7 +373,7 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 \begin{frame}{Induziertes Spiel}
 	Sei $\mathcal G = (E, \vec{\ell}, \Pi, v)$ und $g$ ein bösartiger Fluss aus $F(\mathcal G,w)$.
 	
-	Dann ist $\mathcal G^\gamma = (E, \vec{\ell}^\gamma, \Pi, v-w)$ ein \alert{induziertes Spiel} mit 
+	Dann ist $\mathcal G^g = (E, \vec{\ell}^g, \Pi, v-w)$ ein \alert{induziertes Spiel} mit 
 	\[ \ell_e^\gamma(x) = \ell_e(x+ g(e)) .\]
 	
 	Auch definierbar für eine W'keitsverteilung $\gamma$ über den Erwartungswert.
@@ -400,12 +390,14 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 \begin{frame}{Equilibrium}
 	Für ein Spiel $\mathcal G$ ist $(f, g)$ ein \alert{pures Equilibrium}, wenn 
 	\begin{itemize}
-		\item $f$ ist Nashfluss im induziertem Spiel $\mathcal G^g$
-		\item $g$ ist BBR zu $f$.
+		\item<2-> $f$ ist Nashfluss im induziertem Spiel $\mathcal G^g$
+		\item<3-> $g$ ist BBR zu $f$.
 	\end{itemize}
 	
+	\pause
 	Das Equilibrium ist \alert{semi-pur}, wenn W'keitverteilung $\gamma$ statt Fluss $g$ benutzt wird.
 	
+	\pause
 	Nashdelay $D(\mathcal G, w)$ ist
 	\[
 		\sup \left\{\frac{C^g(f)}{|f|} : (f,g) \text{ ist ein Equilibrium} \right\}
@@ -440,7 +432,7 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 			\Edge[label=$0$](Q1)(P2)
 			
 			% Fluss
-			\draw [myRed, ultra thick, ->, visible on=<1->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
+			\draw [myRed, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
 		\end{tikzpicture}
 	\end{figure}
 	Für jeden Fluss $f$ ist $g$ eine BBR.
@@ -475,8 +467,8 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 		
 		
 		% Fluss
-		\draw [myGreen, ultra thick, ->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
-		\draw [myGreen, ultra thick, ->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+		\draw [myGreen, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1)  (t)};
+		\draw [myGreen, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
 		\end{tikzpicture}
 	\end{figure}
 	Nashfluss $f$ mit $f(a) \approx 0.5$ und $f(b) \approx 0.3$.
