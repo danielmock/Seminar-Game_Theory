@@ -19,7 +19,7 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
 %settings
-\setsansfont[BoldFont={Fira Sans SemiBold}]{Fira Sans Book} % für shitty Projektoren
+%\setsansfont[BoldFont={Fira Sans SemiBold}]{Fira Sans Book} % für shitty Projektoren
 
 % Color Palette by Tol
 \definecolor{TolDarkPurple}{HTML}{332288}
@@ -173,23 +173,23 @@
 		\Edge[label=$0$](Q1)(P2)
 		
 		% Fluss
-		\draw [myBlue, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
+		\draw [myBlue, ultra thick, ->, visible on=<4->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
 		\draw [myGreen, ultra thick, ->, opacity=0.75, visible on=<3->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
-		\draw [myRed, ultra thick, ->, opacity=0.75, visible on=<4->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
+		\draw [myRed, ultra thick, ->, opacity=0.75, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
 	\end{tikzpicture}
 	\end{figure}
 	
 	\begin{columns}[T]
 		\begin{column}{0.3\textwidth}
-			\only<1-5>{
+			\only<1-6>{
 				\textbf{Flusswerte}:
 				\begin{itemize}
-					\item<2-> $f(\text{\textcolor{myBlue}{blau}}) = 0.1$
+					\item<2-> $f(\text{\textcolor{myRed}{rot}}) = 0.2$
 					\item<3-> $f(\text{\textcolor{myGreen}{grün}}) = 0.7$
-					\item<4-> $f(\text{\textcolor{myRed}{rot}}) = 0.2$
+					\item<4-> $f(\text{\textcolor{myBlue}{blau}}) = 0.1$
 				\end{itemize} }
 			
-			\only<6->{
+			\only<7->{
 				\textbf{Auslastungen}:
 				\begin{itemize}
 					\item $f(a) = 0.3$
@@ -197,25 +197,25 @@
 				\end{itemize} }
 		\end{column}
 		\begin{column}{0.7\textwidth}
-			\only<5>{
+			\only<5-6>{
 				\textbf{Auslastungen}:
 				\begin{itemize}
-					\item $f(a) = 0.1 + 0.2 = 0.3$
-					\item $f(b) = 0.7 + 0.1 = 0.8$
+					\item<5-> $f(a) = 0.1 + 0.2 = 0.3$
+					\item<6-> $f(b) = 0.7 + 0.1 = 0.8$
 			\end{itemize} }
 			
-			\only<6->{
+			\only<7->{
 				\textbf{Latenzen}:
 				\begin{itemize}
-					\item<6-> $L(\text{\textcolor{myBlue}{blau}}) = f(a)^2 + f(b) = 0.89$
-					\item<6-> $L(\text{\textcolor{myGreen}{grün}}) = f(b) = 0.8$
-					\item<6-> $L(\text{\textcolor{myRed}{rot}}) = f(a)^2 = 0.09$
+					\item<8-> $L(\text{\textcolor{myRed}{rot}}) = f(a)^2 = 0.09$
+					\item<9-> $L(\text{\textcolor{myGreen}{grün}}) = f(b) = 0.8$
+					\item<10-> $L(\text{\textcolor{myBlue}{blau}}) = f(a)^2 + f(b) = 0.89$
 				\end{itemize} }
 		\end{column}
 	\end{columns}
 
-	\only<7->{
-		\textbf{Kosten}: \\
+	\only<10->{
+		\textbf{Kosten}: 
 		 $C(f)$ = $0.1 \cdot L(\text{blau}) + 0.7 \cdot L(\text{grün}) + 0.2 \cdot L(\text{rot}) = 0.667$ }
 \end{frame}
 
@@ -274,22 +274,24 @@
 
 	\begin{columns}[T]
 		\begin{column}{0.5\textwidth}<2->
-			Nashfluss $f$:
+			\textbf{Nashfluss} $f$:
 			\begin{itemize}
-				\item $f(\text{blau}) = 0 $
-				\item $f(\text{grün}) = \frac{3 - \sqrt{5}}{2} \approx 0.38$
 				\item $f(\text{rot}) = \frac{-1 + \sqrt{5}}{2} \approx 0.62 $
+				\item $f(\text{grün}) = \frac{3 - \sqrt{5}}{2} \approx 0.38$
+				\item $f(\text{blau}) = 0 $
 			\end{itemize}
 		\end{column}
 		\begin{column}{0.5\textwidth}<3->
-			Delays der Pfade:
+			\textbf{Delays der Pfade}:
 			\begin{itemize}
-				\item $L(\text{blau}) = 3- \sqrt{5} $
-				\item $L(\text{grün}) = \frac{3 - \sqrt{5}}{2}$
 				\item $L(\text{rot}) = \frac{3 - \sqrt{5}}{2}$
+				\item $L(\text{grün}) = \frac{3 - \sqrt{5}}{2}$
+				\item $L(\text{blau}) = 3- \sqrt{5} $
 			\end{itemize}
 		\end{column}
 	\end{columns}
+	\only{\textbf{Kosten} $C(\mathcal G) = \frac{3 - \sqrt{5}}{2} \approx 0.38$ \\
+	\textbf{Nasdelay} $D(\mathcal G) = C(\mathcal G)/|f| =c(\mathcal G)$}<4->
 \end{frame}
 
 \begin{frame}{Bekanntes über Auslastungsspiele}
@@ -374,15 +376,16 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 	Sei $\mathcal G = (E, \vec{\ell}, \Pi, v)$ und $g$ ein bösartiger Fluss aus $F(\mathcal G,w)$.
 	
 	Dann ist $\mathcal G^g = (E, \vec{\ell}^g, \Pi, v-w)$ ein \alert{induziertes Spiel} mit 
-	\[ \ell_e^\gamma(x) = \ell_e(x+ g(e)) .\]
+	\[ \ell_e^g(x) = \ell_e(x+ g(e)) .\]
 	
 	Auch definierbar für eine W'keitsverteilung $\gamma$ über den Erwartungswert.
 \end{frame}
 
 
-\begin{frame}{Malicious Best Response}
+\begin{frame}{Beste bösartige Reaktion}
 	Für einen Fluss $f$ (der rationalen Spieler) im Spiel $\mathcal G$ ist die \alert{beste bösartige Reaktion} \emph{(malicious best response)} zu $f$ die Menge der Flüsse
-	\[ BBR(f) = \argmax_{g \in F(\mathcal G, w)} \, C^g(f) .\]
+	\[ BBR(f) = \argmax_{g \in F(\mathcal G, w)} \, C^g(f) ,\]
+	wobei $C^g(f)$ die Kosten $C(f)$ in $\mathcal G^g$ sind.
 	
 	Eine W'keitsverteilung $\gamma$ auf $F(\mathcal G, w)$ ist ein BBR zu $f$, wenn ein Träger von $\gamma$ in $BBR(f)$ liegt.
 \end{frame}
@@ -390,8 +393,8 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 \begin{frame}{Equilibrium}
 	Für ein Spiel $\mathcal G$ ist $(f, g)$ ein \alert{pures Equilibrium}, wenn 
 	\begin{itemize}
-		\item<2-> $f$ ist Nashfluss im induziertem Spiel $\mathcal G^g$
-		\item<3-> $g$ ist BBR zu $f$.
+		\item $f$ ist Nashfluss im induziertem Spiel $\mathcal G^g$
+		\item $g$ ist BBR zu $f$.
 	\end{itemize}
 	
 	\pause
@@ -435,6 +438,7 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 			\draw [myRed, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (P2) (Q2) (t)};
 		\end{tikzpicture}
 	\end{figure}
+	\pause
 	Für jeden Fluss $f$ ist $g$ eine BBR.
 \end{frame}
 
@@ -471,7 +475,10 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 		\draw [myGreen, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
 		\end{tikzpicture}
 	\end{figure}
+	\pause
 	Nashfluss $f$ mit $f(a) \approx 0.5$ und $f(b) \approx 0.3$.
+	
+	Nashdelay $D(\mathcal G, 0.2) \approx 0.5$
 \end{frame}
 
 \begin{frame}{Price of Malice}
@@ -613,11 +620,12 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 		\Edge(Q2)(P3)
 		
 		%Pfad
-		\draw [myBlue, ultra thick] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
-		\draw [myBlue, ultra thick] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
-		\draw [myBlue, ultra thick, ->] plot [smooth] coordinates{(s) (P3) (Q3) (t)};
+		\draw [myBlue, ultra thick, visible on=<2->] plot [smooth] coordinates{(s) (P1) (Q1) (t)};
+		\draw [myBlue, ultra thick, visible on=<2->] plot [smooth] coordinates{(s) (P2) (Q2) (t)};
+		\draw [myBlue, ultra thick, ->, visible on=<2->] plot [smooth] coordinates{(s) (P3) (Q3) (t)};
 		\end{tikzpicture}
 	\end{figure}
+	\pause
 	Auf den blauen Pfaden ist der Fluss $(1- \epsilon)Z$, sonst $0$. Damit ist die Auslastung an den mittleren Kanten: $\textcolor{myBlue}{f(e)} + \textcolor{myRed}{g(e)} = (1 - \epsilon)Z + \epsilon m Z = Z + \epsilon (m-1) Z$
 \end{frame}
 
@@ -630,8 +638,8 @@ Spiel mit $v = 1$ und $w = 0.2$ auf diesem Graphen:
 	\begin{align*}
 		POM(\mathcal G) &= \lim_{\epsilon \to 0^+} \dfrac{D(\mathcal G, \epsilon v) - D(\mathcal G)}{\epsilon D(\mathcal G)} \\
 			&= \lim_{\epsilon \to 0^+} \dfrac{\ell (Z + \epsilon (m-1) Z) - \ell(Z)}{\epsilon \ell(Z)} \\
-			&= \dfrac{(m - 1) Z \ell'(Z)}{\ell(Z)} \\
-			&= d \cdot (m - 1)
+			&= (m - 1)\dfrac{Z \ell'(Z)}{\ell(Z)} \\
+			&= (m - 1) \cdot d
 	\end{align*}
 \end{frame}
 
