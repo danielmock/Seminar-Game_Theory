@@ -1,0 +1,57 @@
+%% Setting the headings to bold instead of italic
+%\titleformat{\chapter}%
+%[display]% shape
+%{\relax\ifthenelse{\NOT\boolean{@tufte@symmetric}}{\begin{fullwidth}}{}}% format applied to label+text
+%	{\bfseries\huge\thechapter}% label
+%	{0pt}% horizontal separation between label and title body
+%	{\huge\rmfamily\bfseries}% before the title body
+%	[\ifthenelse{\NOT\boolean{@tufte@symmetric}}{\end{fullwidth}}{}]% after the title body
+%
+%\titleformat{\section}%
+%[hang]% shape
+%{\normalfont\Large\bfseries}% format applied to label+text
+%{\thesection}% label
+%{1em}% horizontal separation between label and title body
+%{}% before the title body
+%[]% after the title body
+%
+%\titleformat{\subsection}%
+%[hang]% shape
+%{\normalfont\large\bfseries}% format applied to label+text
+%{\thesubsection}% label
+%{1em}% horizontal separation between label and title body
+%{}% before the title body
+%[]% after the title body
+%
+%\titleformat{\paragraph}%
+%[runin]% shape
+%{\normalfont\bfseries}% format applied to label+text
+%{\theparagraph}% label
+%{1em}% horizontal separation between label and title body
+%{}% before the title body
+%[]% after the title body
+
+
+%% improving tuftebreak
+%% http://tex.stackexchange.com/questions/291746/tufte-latex-newthought-after-section
+\makeatletter
+\def\tuftebreak{%
+	\if@nobreak\else
+	\par
+	\ifdim\lastskip<\tufteskipamount
+	\removelastskip \penalty -100
+	\tufteskip
+	\fi
+	\fi
+}
+\makeatother
+
+%% Change the spacing in the itemize environment
+\setlist[itemize]{nosep}
+
+%% Defining the theorem environments
+\newtheorem*{theorem}{Theorem}
+\theoremstyle{definition}
+\newtheorem*{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}

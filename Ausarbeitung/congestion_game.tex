@@ -1,0 +1,32 @@
+\section{Defining the congestion game}
+\newcommand{\tupel}[1]{\left(#1\right)}
+\newthought{In this section} we introduce the concept of \emph{congestion games} as preliminaries for the rest of the paper.
+Every congestion game is based on a flow network $G$ with a source $s$ and a sink $d$ where the agents control a flow $f$ from $s$ to $t$.
+Every agent chooses a path from the source to the sink, with the aim to minimize the occurring delay on the path.
+The delay is the sumTODO
+
+\begin{definition}[Congestion game]
+	We define a \emph{symmetrical\footnote{symmetric: every agent has the same utility function}, non-atomic\footnote{non-atomic: the players are not discrete entities, but they are a continuum. But do not worry, this detail will be sufficiently explained later.}, congestion game} $\mathcal G$ as a tuple $(G, \vec{\ell}, v)$ where
+	\begin{itemize}
+		\item $G = (E, V)$ is a flow network, where $E$ is the edge set, $V$ the vertex set, $s$ the source and $t$ the drain,
+		\item $\vec{\ell}$ is vector consisting of latency functions for every edge in $E$,
+		\item and $v$ is the desired (real) flow value.
+	\end{itemize}
+	Additionally, we define $\Pi$ as the set of all $s-t$ paths in $G$.
+\end{definition}
+
+\begin{remark}
+	We only consider latency functions $\ell \colon \mathbb R_+ \to \mathbb R_+$ which are nondecreasing.
+\end{remark} 
+
+BSP
+\begin{definition}[Flow]
+	A \emph{flow} in a flow network is a function $f \colon \Pi \to \mathbb R_+$ which maps every $s-t$ path to a flow value.
+	The \emph{value} of a flow is $|f| = \sum_{P \in \Pi} f(P)$ the sum of the flow values of every path in the network.
+	We denote the set of every flow in $\mathcal G$ with flow value $v$ as $F(\mathcal G, v)$.
+		\marginnote{The abuse of notation indicates that our definition of a flow is equivalent to the usual one given by defining it as a function $f \colon E \to \mathbb R_+$ with flow conservation and symmetry but without the capacity constraint. }
+	The \emph{load} of an edge $e \in E$ is $f(e) = \sum_{P \in \Pi \colon e \in P} f(P)$ the summed up flow value of the paths which contain $e$.
+\end{definition}
+
+
+	\marginnote{As an attentive reader you certainly noticed that this game degenerates to a min-cost flow problem if the latency functions are constants.}
