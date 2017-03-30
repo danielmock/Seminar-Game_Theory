@@ -1,17 +1,16 @@
-\documentclass[a4paper, titlepage]{tufte-handout}
+\documentclass[a4paper]{tufte-handout}
 
-\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{lmodern}
 \usepackage[english]{babel}
 \usepackage{mathtools}
 \usepackage{amsthm}
 \usepackage{tkz-graph}
 \usepackage{booktabs}
 \usepackage{enumitem}
+\usepackage[caption=false]{subfig}
+\usetikzlibrary{arrows.meta}
 
 \input{settings}
-
 
 \title{Congestion Games with Malicious Players}
 \author{Daniel Alexander Mock}
@@ -32,6 +31,6 @@
 sdf
 \section{Lower bounds on the Price of Malice}
 sdf
-\section{Windfall of Malice}
-sdf
+
+\input{windfall_of_malice}
 \end{document}

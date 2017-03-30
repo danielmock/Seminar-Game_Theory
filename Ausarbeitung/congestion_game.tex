@@ -23,10 +23,11 @@ BSP
 \begin{definition}[Flow]
 	A \emph{flow} in a flow network is a function $f \colon \Pi \to \mathbb R_+$ which maps every $s-t$ path to a flow value.
 	The \emph{value} of a flow is $|f| = \sum_{P \in \Pi} f(P)$ the sum of the flow values of every path in the network.
-	We denote the set of every flow in $\mathcal G$ with flow value $v$ as $F(\mathcal G, v)$.
+	We denote the set of flows in $\mathcal G$ with flow value $v$ as $F(\mathcal G, v)$.
 		\marginnote{The abuse of notation indicates that our definition of a flow is equivalent to the usual one given by defining it as a function $f \colon E \to \mathbb R_+$ with flow conservation and symmetry but without the capacity constraint. }
-	The \emph{load} of an edge $e \in E$ is $f(e) = \sum_{P \in \Pi \colon e \in P} f(P)$ the summed up flow value of the paths which contain $e$.
+	The \emph{load} on an edge $e \in E$ is $f(e) = \sum_{P \in \Pi \colon e \in P} f(P)$ the summed up flow value of the paths which contain $e$.
 \end{definition}
+
 
 
 	\marginnote{As an attentive reader you certainly noticed that this game degenerates to a min-cost flow problem if the latency functions are constants.}
