@@ -47,10 +47,13 @@
 \makeatother
 
 %% Change the spacing in the itemize environment
-\setlist[itemize]{nosep}
+\setlist[itemize]{nosep, leftmargin=0em}
+\setlist[enumerate]{nosep, leftmargin=0em}
 
 %% Defining the theorem environments
 \newtheorem*{theorem}{Theorem}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{lemma}{Lemma}
 \theoremstyle{definition}
 \newtheorem*{definition}{Definition}
 \theoremstyle{remark}
