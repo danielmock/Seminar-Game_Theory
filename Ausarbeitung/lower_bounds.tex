@@ -9,3 +9,131 @@ We take a look at this two main reasons:
 	\item edges that \emph{congest fast} if a small load is added by a malicious player
 	\item and \emph{long paths} that a malicious player can choose to increase the load of as many edges as possible.
 \end{enumerate}
+The first reason is quantifiable by \emph{relative slope}.
+Let $\ell \colon [0,1] \to \mathbb R_+$ be a differentiable function.
+Its relative slope is defined by \[
+rs(\ell) = \max_{x \in [0,1]} \dfrac{\ell'(x)}{\ell(x)}x .\]
+Another way to define the relative slope origins from numerical analysis. 
+There it is defined by taking the maximum of the relative change in the output $\ell(x)$ compared to the relative change in the input $x$, 
+or notate as 
+\[ rs(\ell) = \dfrac{\text{relative } \Delta \ell(x)}{\text{relative } \Delta x \phantom{\ell()}} .\]
+
+TODO
+
+\begin{theorem}
+	There exists a congestion game with a $d \cdot (m - 1)$ price of malice where the maximal relative slope of the latency functions is $d$ and the network has $\mathcal O(m)$ edges.
+\end{theorem}
+\begin{proof}
+	We construct a congestion game $\mathcal G$ for a given $m$ and a given latency function $\ell$.
+	In figure piosfd we see the underlying network for $m=4$.
+	The vertex set $E$ consists of the source $s$, the sink $t$ and the vertices $p_1, \dots, p_m$ and $q_1, \dots, q_m$.
+	The source has for every $p_i$ an outgoing edge to it and every $p_i$ has an edge to the corresponding $q_i$.
+	Every $q_i$ has an edge to the sink and an edge to $p_{i+1}$ (except $q_m$).
+	We define the flow value $v$ as $mX$ where $X$ is the point where the relative slope is reached ($\ell'(X)/\ell(X) \cdot X = d$) and the malicious flow value $w$ as $\epsilon m X$ for an $\epsilon$.
+	
+	Like in examples from previous section, the malicious flow is able to cover every edge with a non-constant latency function with one path, resulting in loading every of those edges as much as possible.
+	This \smallcaps{mbr} is independent of the rational flow.
+	This and the resulting induced game is pictured in figure TODO.
+	Because every direct path $(s, p_i, q_i, t)$ has the latency functions the rational flow of size $(1-\epsilon)mX$ is split up between them. 
+	No other paths are chosen for the nash flow because their latency is strictly larger than the latency of the direct ones (like in the previous section).
+	Hence, the load on every edge $(p_i, q_i)$ in the middle is $g(e) + f(e)$ which equals $\epsilon m X + (1-\epsilon)X = X+ \epsilon X (m-1)$, thus the latency of every direct path $P$ is $L(P) = \ell(X + \epsilon X (m-1))$ or $L(P)=\ell(X)$ if $\epsilon = 0$ which are the nash delays of the game with ($D(\mathcal G, \epsilon m X)$) and without the malicious player ($D(\mathcal G)$).
+	Thereupon we compute the price of malice
+	\begin{align*}
+		\smallcaps{POM}(\mathcal G) &= \lim_{\epsilon \to 0^+} \dfrac{D(\mathcal G, \epsilon v) - D(\mathcal G)}{\epsilon D(\mathcal G)} \\
+		&= \lim_{\epsilon \to 0^+} \dfrac{\ell (X + \epsilon (m-1) X) - \ell(X)}{\epsilon \ell(X)} \\
+		&= (m - 1)\dfrac{X \ell'(X)}{\ell(X)} \\
+		&= (m - 1) \cdot d
+	\end{align*}
+	where we use the identity 
+	\[ \lim_{\epsilon \to 0^+}\epsilon \to 0 \frac{\ell(x+a\epsilon - \ell(x))}{\epsilon} = a \cdot  \ell'(x) \]
+	for $a=X(m-1)$.
+\end{proof}
+
+\begin{figure}
+	\begin{tikzpicture}
+	\SetGraphUnit{2}
+	\GraphInit[vstyle=Normal]
+	\SetUpEdge[style={->, thick}, color=gray]
+	\tikzset{LabelStyle/.style = {fill=none, above}}
+	\SetVertexNoLabel
+	\Vertex{P1}
+	\SO(P1){P2}
+	\SO(P2){P3}
+	
+	\foreach \v in{1,2,3}{\EA[unit=3](P\v){Q\v}}
+	
+	\SetVertexLabel
+	\WE[Lpos=180](P2){s}
+	\EA(Q2){t}
+	\foreach \v in{1,2,3}{\Edge[label=$\ell(x)$](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+	
+	
+	\foreach \v in{1,2,3}{\Edge[label=$0$](s)(P\v)}  %  s-P Kanten
+	\foreach \v in{1,2,3}{\Edge[label=$0$](Q\v)(t)}  %  Q-t Kanten
+	% Rückkanten
+	\Edge[label=$0$](Q1)(P2)
+	\Edge[label=$0$](Q2)(P3)
+	\end{tikzpicture}
+	\caption{Congestion game with $m=3$}
+	\label{low-base}
+\end{figure}
+\begin{figure}
+	\begin{tikzpicture}
+	\SetGraphUnit{2}
+	\GraphInit[vstyle=Normal]
+	\SetUpEdge[style={->, dashed}, color=gray]
+	\tikzset{LabelStyle/.style = {fill=none, above}}
+	\SetVertexNoLabel
+	\Vertex{P1}
+	\SO(P1){P2}
+	\SO(P2){P3}
+	
+	\foreach \v in{1,2,3}{\EA[unit=3](P\v){Q\v}}
+	
+	\SetVertexLabel
+	\WE[Lpos=180](P2){s}
+	\EA(Q2){t}
+	\foreach \v in{1,2,3}{\Edge(P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+	
+	
+	\foreach \v in{1,2,3}{\Edge(s)(P\v)}  %  s-P Kanten
+	\foreach \v in{1,2,3}{\Edge(Q\v)(t)}  %  Q-t Kanten
+	% Rückkanten
+	\Edge(Q1)(P2)
+	\Edge(Q2)(P3)
+	
+	\Edges[color=red, style={->}](s,P1,Q1,P2,Q2,P3,Q3,t)
+	\end{tikzpicture}
+	\caption{Malicious best response}
+	\label{low-mbr}
+\end{figure}
+\begin{figure}
+	\begin{tikzpicture}
+	\SetGraphUnit{2}
+	\GraphInit[vstyle=Normal]
+	\SetUpEdge[style={->, dashed}, color=gray]
+	\tikzset{LabelStyle/.style = {fill=none, above}}
+	\SetVertexNoLabel
+	\Vertex{P1}
+	\SO(P1){P2}
+	\SO(P2){P3}
+	
+	\foreach \v in{1,2,3}{\EA[unit=3](P\v){Q\v}}
+	
+	\SetVertexLabel
+	\WE[Lpos=180](P2){s}
+	\EA(Q2){t}
+	\foreach \v in{1,2,3}{\Edge[label=$\ell(x+\epsilon m X)$](P\v)(Q\v)}  %  P-Q Kanten mit l(x)
+	
+	
+	\foreach \v in{1,2,3}{\Edge(s)(P\v)}  %  s-P Kanten
+	\foreach \v in{1,2,3}{\Edge(Q\v)(t)}  %  Q-t Kanten
+	% Rückkanten
+	\Edge(Q1)(P2)
+	\Edge(Q2)(P3)
+	\SetUpEdge[style={->, thick,}, color=blue]
+	\foreach \v in{1,2,3}{\Edge(s)(P\v); \Edge(P\v)(Q\v);\Edge(Q\v)(t)}
+	\end{tikzpicture}
+	\caption{Rational nash flow in the induced game}
+	\label{low-rational}
+\end{figure}
